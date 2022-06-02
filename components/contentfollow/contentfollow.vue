@@ -99,12 +99,14 @@
             <div class="pb-2">
               <a
                 class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] cursor-pointer"
-                @click="changeHeart"
+                @click="changeHeart(item.id)"
               >
                 <span
                   class="mdi mdi-heart text-[27px]"
                   :style="
-                    changeColor ? { color: '#fe2c55' } : { color: '#000' }
+                    checkLikedVideo(index)
+                      ? { color: '#fe2c55' }
+                      : { color: '#000' }
                   "
                 ></span
               ></a>
@@ -161,13 +163,21 @@ export default {
       tokenUser: '',
     }
   },
+  computed: {
+    getListVideo() {
+      return this.$store.state.listVideos
+    },
+  },
   async mounted() {
     this.showLoading = true
     this.tokenUser = localStorage.getItem('token')
     this.$store.dispatch('actionsetIsUser', this.tokenUser)
-    await this.loadVideoIsFollow()
-    this.showLoading = false
-    this.listContent.sort(() => Math.random() - 0.5)
+    if (this.tokenUser && this.tokenUser !== '') {
+      this.dataUser = JSON.parse(localStorage.getItem('user'))
+      await this.loadVideoIsFollow()
+      this.showLoading = false
+    }
+    // this.listContent.sort(() => Math.random() - 0.5)
     window.console.log(this.listContent)
   },
   methods: {
@@ -175,22 +185,44 @@ export default {
       const res = await AuthService.videoIsFollow()
       if (res && res.status === 'success') {
         this.listContentFollow = res.video
-        window.console.log(res)
+        this.$store.dispatch('actionSetListVideos', res.video)
         window.console.log('thành công')
       } else {
         this.$router.push('/')
         window.console.log('ko thành công')
       }
     },
-    changeHeart() {
-      this.changeColor = !this.changeColor
-    },
-    changeFollow() {
-      this.changeColorFollow = !this.changeColorFollow
-      if (this.changeColorFollow === true) {
-        this.textFollow = 'Đang Follow'
+    async changeHeart(id) {
+      if (this.tokenUser) {
+        const res = await AuthService.like({
+          video_id: id,
+        })
+        if (res && res.status === 'success') {
+          this.loadVideoIsFollow()
+        } else {
+          window.console.log('ko thành công')
+        }
       } else {
-        this.textFollow = 'Follow'
+        this.$notify({
+          type: 'warn',
+          group: 'default',
+          title: 'Warning',
+          text: 'Vui lòng đăng nhập để thực hiện chức năng này',
+        })
+      }
+    },
+    checkLikedVideo(index) {
+      if (this.tokenUser && this.dataUser) {
+        const data = this.getListVideo.find(
+          (el) => el.id === this.getListVideo[index].id
+        )
+        // window.console.log(data)
+        const dataLikes = !!data.likes.find(
+          (el) => el.user_id === this.dataUser.id
+        )
+        return dataLikes
+      } else {
+        return false
       }
     },
     videoPlay(id) {
