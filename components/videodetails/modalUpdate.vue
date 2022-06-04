@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="ShowModalUpdate"
+    v-show="showModalUpdate"
     id="defaultModal"
     tabindex="-1"
     aria-hidden="true"
@@ -38,8 +38,7 @@
           </button>
         </div>
         <!-- Modal body -->
-        <loading-video v-show="showLoadingBox"></loading-video>
-
+        <loading-sign-in v-show="showLoadingBox"></loading-sign-in>
         <div
           class="bg-white w-[90%] mx-auto my-4 py-6 px-10 rounded"
           style="box-shadow: rgb(0 0 0 / 20%) 0 2px 8px"
@@ -217,7 +216,7 @@
                   <img
                     v-if="listImg.length <= 0"
                     :src="item.cover"
-                    class="bg-[#16182308] w-[84px] h-[150px]"
+                    class="bg-[#16182308] w-[84px] h-[150px] object-cover"
                   />
                 </div>
               </div>
@@ -288,19 +287,20 @@
 <script>
 import { EmojiPicker } from 'vue-emoji-picker'
 import VideoSnapshot from 'video-snapshot'
-import LoadingVideo from '../loading/loadingVideo.vue'
 import LoadingBox from '../loading/loadingBox.vue'
 // import axios from 'axios'
+import LoadingSignIn from '../loading/loadingSignIn.vue'
+
 import AuthService from '@/services/authService.js'
 
 export default {
   components: {
     EmojiPicker,
-    LoadingVideo,
     LoadingBox,
+    LoadingSignIn,
   },
   props: {
-    ShowModalUpdate: {
+    showModalUpdate: {
       type: Boolean,
       default: false,
     },

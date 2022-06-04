@@ -38,29 +38,7 @@
           </button>
         </div>
         <!-- Modal body -->
-        <!-- <form>
-          <label for="email">Your email address:</label>
-          <input id="email" type="email" v-model="email" />
-          <label for="message">Message:</label>
-          <textarea id="message" v-model="message" />
-          <button type="submit" @click.prevent="send">Send email</button>
-        </form> -->
         <div class="px-5">
-          <!-- <div class="my-4">
-            <label
-              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 text-left"
-              for="email"
-            >
-              Email
-            </label>
-            <input
-              v-model="email"
-              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="email"
-              type="email"
-              placeholder="Email"
-            />
-          </div> -->
           <div class="my-4">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 text-left"
@@ -131,15 +109,18 @@
           </button>
         </div>
       </div>
+      <loading-sign-in v-show="showLoading"></loading-sign-in>
     </div>
   </div>
 </template>
 
 <script>
 // import axios from 'axios'
+import loadingSignIn from '../loading/loadingSignIn.vue'
 import AuthService from '@/services/authService.js'
 
 export default {
+  components: { loadingSignIn },
   props: {
     showModal: {
       type: Boolean,
@@ -159,11 +140,14 @@ export default {
       oldPass: '',
       newPass: '',
       confirmNewPass: '',
+      showLoading: false,
     }
   },
   methods: {
     async changePassword() {
       if (this.newPass === this.confirmNewPass) {
+        this.showLoading = true
+
         const res = await AuthService.changePassword({
           old_password: this.oldPass,
           new_password: this.newPass,
@@ -171,11 +155,21 @@ export default {
 
         // this.$store.dispatch('actionsetDataUser', data)
         if (res && res.status === 'success') {
-          window.console.log('đổi pass thành công')
-          window.location.reload()
+          this.showLoading = false
+          this.$notify({
+            type: 'success',
+            group: 'default',
+            title: 'Success',
+            text: 'Đổi mật khẩu thành công!!',
+          })
+          setTimeout(() => window.location.reload(), 800)
         } else {
-          this.showAlertFail = true
-          window.console.log('đổi pass ko thành công')
+          this.$notify({
+            type: 'warn',
+            group: 'default',
+            title: 'Warning',
+            text: 'Đổi mật khẩu không thành công',
+          })
         }
       } else {
         this.$notify({

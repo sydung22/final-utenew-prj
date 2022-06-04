@@ -101,6 +101,7 @@
           <a
             :href="urlVideo"
             class="mdi mdi-download text-[17px] w-7 h-7 flex items-center justify-center text-black rounded-full bg-[#eee] mr-2 list-icon-share"
+            @click="checkCoin"
           ></a>
           <span
             v-if="tokenUser && videoDataUser === dataUser.id"
@@ -174,6 +175,7 @@
                   Trả Lời
                 </p>
                 <span
+                  v-if="tokenUser && videoDataUser === dataUser.id"
                   class="mdi mdi-delete-outline text-[16px] cursor-pointer"
                   @click="deleteComment(item.id)"
                 ></span>
@@ -349,6 +351,7 @@
         >
           Đăng
         </button>
+        <loading-sign-in v-show="showLoading"></loading-sign-in>
       </div>
     </div>
   </div>
@@ -358,6 +361,7 @@
 import { EmojiPicker } from 'vue-emoji-picker'
 import moment from 'moment'
 import Dialog from '../dialog/dialog.vue'
+import LoadingSignIn from '../loading/loadingSignIn.vue'
 
 // import axios from 'axios'
 import AuthService from '@/services/authService.js'
@@ -367,6 +371,7 @@ export default {
   components: {
     EmojiPicker,
     Dialog,
+    LoadingSignIn,
   },
   props: {
     userName: {
@@ -394,6 +399,10 @@ export default {
       default: () => 1,
     },
     deleteComment: {
+      type: Function,
+      default: () => 1,
+    },
+    checkCoin: {
       type: Function,
       default: () => 1,
     },
@@ -478,6 +487,7 @@ export default {
       listReply: [],
       tokenUser: '',
       showDialog: false,
+      showLoading: false,
     }
   },
   computed: {
@@ -521,6 +531,7 @@ export default {
     async saveComment() {
       if (this.dataUser && this.tokenUser) {
         if (this.showUpReply === false) {
+          this.showLoading = true
           const res = await AuthService.comment({
             content: this.commentContent,
             video_id: this.$route.params.id,
@@ -535,6 +546,8 @@ export default {
             this.$store.dispatch('actionsetListReplyComments', resCmt.comments)
             this.$store.dispatch('actionsetListUserLikedCmt', resCmt.comments)
             this.commentContent = ''
+            this.showLoading = false
+
             this.$notify({
               type: 'success',
               group: 'default',
@@ -545,6 +558,8 @@ export default {
             window.console.log('ko thành công')
           }
         } else {
+          this.showLoading = true
+
           const res = await AuthService.reply({
             content: this.commentContent,
             comment_id: this.repCmtData.id,
@@ -564,15 +579,16 @@ export default {
                 resCmt.comments
               )
               this.$store.dispatch('actionsetListUserLikedCmt', resCmt.comments)
+              this.showLoading = false
+              this.$notify({
+                type: 'success',
+                group: 'default',
+                title: 'Success',
+                text: 'Bạn vừa trả lời bình luận bài viết này',
+              })
             } else {
               window.console.log('ko thành công')
             }
-            this.$notify({
-              type: 'success',
-              group: 'default',
-              title: 'Success',
-              text: 'Bạn vừa trả lời bình luận bài viết này',
-            })
           } else {
             window.console.log('ko thành công')
           }

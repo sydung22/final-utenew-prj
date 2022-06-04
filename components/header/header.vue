@@ -13,7 +13,7 @@
         ></a
       >
       <div
-        class="flex items-center bg-[#1618230f] w-[361px] py-[10px] px-4 rounded-full"
+        class="flex items-center bg-[#1618230f] w-[361px] py-[10px] px-4 rounded-full relative"
       >
         <input
           v-model="searchTitle"
@@ -22,7 +22,7 @@
           placeholder="Tìm kiếm tài khoản và video"
         />
         <span
-          v-show="searchTitle"
+          v-show="showClose"
           class="mdi mdi-close-box text-[18px] text-gray-400 cursor-pointer mr-[10px]"
           @click="searchTitle = ''"
         ></span>
@@ -30,6 +30,11 @@
         <div class="cursor-pointer" @click="showData">
           <img src="./assets/img/search.png" alt="" class="w-[24px]" />
         </div>
+        <div
+          v-show="showLoading"
+          class="loader ease-linear rounded-full border-[3px] border-t-[3px] border-gray-400 h-4 w-4 absolute right-[60px]"
+        ></div>
+        <dialog-search :show-dialog-search="showSearchBox"></dialog-search>
       </div>
       <loading-box v-show="showLoadingBox" class="w-[250px]">
         <div class="flex items-center">
@@ -109,7 +114,7 @@
           :show-when-leave="() => (showBoxProfile = false)"
         ></box-profile>
       </div>
-      <div v-else-if="!token" v-show="showItem" class="flex items-center">
+      <div v-else v-show="showItem" class="flex items-center">
         <span
           class="font-bold text-[17px] mr-6 cursor-pointer"
           @click="showAlert"
@@ -124,14 +129,14 @@
 <script>
 // import axios from 'axios'
 import LoadingBox from '../loading/loadingBox.vue'
-
+import DialogSearch from '../search/dialogSearch.vue'
 import Signin from '../signin/signin.vue'
 import boxProfile from './boxProfile.vue'
 import AuthService from '@/services/authService.js'
 
 export default {
   name: 'HeaderContainer',
-  components: { Signin, boxProfile, LoadingBox },
+  components: { Signin, boxProfile, LoadingBox, DialogSearch },
   data() {
     return {
       showBoxProfile: false,
@@ -144,7 +149,15 @@ export default {
       showLoadingBox: false,
       showItemSuccess: false,
       showItem: false,
+      showSearchBox: false,
+      showLoading: false,
+      showClose: false,
     }
+  },
+  watch: {
+    searchTitle() {
+      setTimeout(() => this.searchData(), 300)
+    },
   },
   async mounted() {
     this.showLoadingBox = true
@@ -179,16 +192,40 @@ export default {
         this.$store.dispatch('actionSetListAccount', res.result.users)
         this.$store.dispatch('actionSetListVideos', res.result.videos)
         this.$router.push('/SearchPage')
-        this.searchTitle = ''
       } else {
         this.$router.push('/')
         window.console.log('ko thành công')
+      }
+    },
+    async searchData() {
+      if (this.searchTitle === '') {
+        this.showSearchBox = false
+        this.showLoading = false
+        this.showClose = false
+      } else {
+        this.showClose = false
+        this.showLoading = true
+        const res = await AuthService.search(this.searchTitle)
+        if (res && res.status === 'success') {
+          this.showSearchBox = true
+          this.$store.dispatch('actionSetTitleInfo', this.searchTitle)
+          this.$store.dispatch('actionSetListAccount', res.result.users)
+          this.showLoading = false
+          this.showClose = true
+        }
+        //  else {
+        //   this.showSearchBox = false
+        //   this.showLoading = false
+        //   this.showClose = false
+        // }
       }
     },
   },
 }
 </script>
 <style scoped>
+@import './assets/style.css';
+
 .css-qaagm8-arrow {
   display: block;
   position: absolute;

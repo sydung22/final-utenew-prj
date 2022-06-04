@@ -39,6 +39,7 @@
       />
     </div>
     <test-page v-show="showSpin"></test-page>
+    <loading-sign-in v-show="showLoading"></loading-sign-in>
     <notifications group="default" position="top left" />
   </div>
 </template>
@@ -51,11 +52,19 @@ import Videocomment from '~/components/videodetails/videocomment.vue'
 import ModalReport from '~/components/videodetails/modalReport.vue'
 import AuthService from '@/services/authService.js'
 import ModalUpdate from '~/components/videodetails/modalUpdate.vue'
+import LoadingSignIn from '~/components/loading/loadingSignIn.vue'
 
 export default {
   name: 'DetailsVideo',
 
-  components: { testPage, Videoplay, Videocomment, ModalReport, ModalUpdate },
+  components: {
+    testPage,
+    Videoplay,
+    Videocomment,
+    ModalReport,
+    ModalUpdate,
+    LoadingSignIn,
+  },
   data() {
     return {
       detailsVideo: {},
@@ -72,6 +81,7 @@ export default {
       dataVideo: {},
       listHashtags: [],
       listPosters: [],
+      showLoading: false,
     }
   },
   computed: {
@@ -171,8 +181,10 @@ export default {
       }
     },
     async deleteVideo() {
+      this.showLoading = true
       const res = await AuthService.deleteVideo(Number(this.$route.params.id))
       if (res && res.status === 'success') {
+        this.showLoading = false
         this.$notify({
           type: 'success',
           group: 'default',
@@ -187,12 +199,14 @@ export default {
       }
     },
     async deleteComment(id) {
+      this.showLoading = true
       const res = await AuthService.deleteComment(id)
       if (res && res.status === 'success') {
         const resCmt = await AuthService.loadCommentById(this.$route.params.id)
         this.$store.dispatch('actionsetListComments', resCmt.comments)
         this.$store.dispatch('actionsetListReplyComments', resCmt.comments)
         this.$store.dispatch('actionsetListUserLikedCmt', resCmt.comments)
+        this.showLoading = false
         this.$notify({
           type: 'success',
           group: 'default',

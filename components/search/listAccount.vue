@@ -58,20 +58,6 @@ export default {
   },
 
   methods: {
-    // async getProduct() {
-    //   const res = await axios.post('http://127.0.0.1:8000/api/search_users', {
-    //     value: this.getTitleSearch,
-    //   })
-    //   window.console.log(this.searchTitle)
-    //   window.console.log(this.$store.state.searchTitle)
-    //   if (res.status === 200) {
-    //     if (this.getTitleSearch) {
-    //       this.listUser = res.data.data
-    //     } else {
-    //       window.console.log('Không có dữ liệu')
-    //     }
-    //   }
-    // },
     getAccount() {
       if (this.getTitleSearch) {
         this.listUser = this.getListAccount

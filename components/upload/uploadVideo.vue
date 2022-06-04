@@ -22,7 +22,7 @@
             <video
               :src="srcVideo"
               alt="An image example with Cloudinary"
-              class="w-[400px] h-auto"
+              class="w-full h-[400px]"
               autoplay
               controls
               muted

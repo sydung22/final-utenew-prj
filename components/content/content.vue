@@ -70,7 +70,7 @@
           <button
             v-if="tokenUser && tokenUser !== ''"
             v-show="dataUser.id !== item.user.id"
-            class="text-[#fe2c55] border border-[#fe2c55] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#faeef1] duration-300 mb-12"
+            class="text-[#fe2c55] border border-[#fe2c55] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#faeef1] duration-300 mb-12 button-follow"
             :style="
               !isFollow(index)
                 ? { color: '#fe2c55', border: '1px solid #fe2c55' }
@@ -105,8 +105,8 @@
           </nuxt-link>
           <div class="ml-5 text-center">
             <div class="pb-2">
-              <a
-                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] cursor-pointer"
+              <button
+                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] cursor-pointer button-heart"
                 @click="changeHeart(item.id)"
               >
                 <span
@@ -116,8 +116,8 @@
                       ? { color: '#fe2c55' }
                       : { color: '#000' }
                   "
-                ></span
-              ></a>
+                ></span>
+              </button>
               <p class="text-[12px] font-semibold text-[#000] my-1">
                 {{ item.likes_count }}
               </p>
@@ -327,6 +327,43 @@ export default {
 .sidebar-right::-webkit-scrollbar-thumb {
   border-radius: 12px;
   background-color: #ddd;
+}
+
+.button-heart {
+  transition-duration: 0.3s;
+  position: relative;
+}
+
+.button-heart::after {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 0.4s;
+  box-shadow: 0 0 10px 30px #fe2c55;
+}
+
+.button-heart:active::after {
+  box-shadow: 0 0 0 0 #fe2c55;
+  position: absolute;
+  border-radius: 50%;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  transition: 0s;
+}
+
+.button-follow:active {
+  transform: translateY(-25px);
+}
+
+.button-heart:active {
+  transform: translateY(5px);
 }
 
 @media (max-width: 1401px) {

@@ -198,15 +198,18 @@
           </button>
         </div>
       </div>
+      <loading-sign-in v-show="showLoading"></loading-sign-in>
     </div>
   </div>
 </template>
 
 <script>
 // import axios from 'axios'
+import loadingSignIn from '../loading/loadingSignIn.vue'
 import AuthService from '@/services/authService.js'
 
 export default {
+  components: { loadingSignIn },
   props: {
     showModal: {
       type: Boolean,
@@ -224,12 +227,9 @@ export default {
   data() {
     return {
       dataUpdate: {},
-      src: this.$cloudinary.image.url(
-        `https://res.cloudinary.com/dswt194ko/image/upload/v1653224053/imageUser/jaxwdweyextfcorhawva.png`
-      ),
-      srcVideo: this.$cloudinary.video.url(
-        `https://res.cloudinary.com/dswt194ko/video/upload/v1652511649/videoUser/video_11_dre4ba.mp4`
-      ),
+      src: '',
+      srcVideo: '',
+      showLoading: false,
     }
   },
   computed: {
@@ -272,13 +272,14 @@ export default {
         .then((res) => (this.src = res.secure_url))
       //  secure_url)
       // this.dataUpdateObj.avatar = this.src
-      console.log(instance)
+      window.console.log(instance)
       this.item.avatar = this.src
-      console.log(this.item.avatar)
     },
     async updateProfile() {
+      this.showLoading = true
       const res = await AuthService.updateProfile(this.item)
       if (res && res.status === 'success') {
+        this.showLoading = false
         this.$notify({
           type: 'success',
           group: 'default',
@@ -287,7 +288,7 @@ export default {
         })
         localStorage.setItem('user', JSON.stringify(res.user))
         window.console.log(res.user)
-        setTimeout(() => window.location.reload(), 1000)
+        setTimeout(() => window.location.reload(), 800)
       } else {
         window.console.log('đổi thông tin ko thành công')
       }

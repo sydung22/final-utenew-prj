@@ -22,7 +22,7 @@
           ></div>
         </div>
         <div class="text-gray-500 text-xs font-medium mt-2 text-center">
-          Vui lòng chờ trong giây lát
+          Đang tải! Vui lòng chờ trong giây lát
         </div>
       </div>
     </div>

@@ -36,7 +36,7 @@
           <div v-if="tokenUser && dataUser && detailsUser.id !== dataUser.id">
             <button
               v-if="isFollow() === false"
-              class="bg-[#fe2c55] text-white px-4 py-2 font-bold rounded-md w-[190px]"
+              class="bg-[#fe2c55] text-white px-4 py-2 font-bold rounded-md w-[190px] hover:bg-[#c91438]"
               @click="followUser(detailsUser.id)"
             >
               Follow
@@ -45,10 +45,10 @@
               <nuxt-link
                 to="/ChatPage"
                 class="text-[#fe2c55] border border-[#fe2c55] py-[6px] px-[45px] font-bold rounded-md text-[18px] hover:bg-[#faeef1] duration-300"
-                >Tin nhắn</nuxt-link
+                >Đang theo dõi</nuxt-link
               >
               <div
-                class="border ml-2 w-[40px] h-[40px] flex items-center justify-center rounded-md border-[#ccc] cursor-pointer"
+                class="border ml-2 w-[40px] h-[40px] flex items-center justify-center rounded-md border-[#ccc] cursor-pointer hover:bg-gray-400"
                 @click="followUser(detailsUser.id)"
               >
                 <svg
@@ -110,7 +110,7 @@
         </p>
         <p class="mr-[35px] italic">
           <span class="mr-1.5 font-bold text-[18px] not-italic">{{
-            listCountLiked.data
+            sumListLike
           }}</span
           >Lượt Thích
         </p>
@@ -225,6 +225,8 @@ export default {
       tokenUser: '',
       showDetailProfile: false,
       showLoadingBox: false,
+      countListLike: [],
+      sumListLike: 0,
     }
   },
   computed: {
@@ -248,9 +250,17 @@ export default {
     this.dataUser = resUser
     this.dataUpdate = resUser
     this.isFollow()
+    this.loadCountLike()
   },
 
   methods: {
+    loadCountLike() {
+      this.listVideoUser.forEach((v) => {
+        this.countListLike.push(v.likes.length)
+      })
+      window.console.log(this.countListLike)
+      this.sumListLike = this.countListLike.reduce((a, b) => a + b, 0)
+    },
     async loadDetailUser() {
       const res = await AuthService.detailsUser(this.$route.params.id)
       if (res && res.status === 'success') {
