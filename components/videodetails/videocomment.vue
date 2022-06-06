@@ -99,9 +99,9 @@
         </div>
         <div class="flex">
           <a
-            :href="urlVideo"
+            v-if="tokenUser && videoDataUser !== dataUser.id"
             class="mdi mdi-download text-[17px] w-7 h-7 flex items-center justify-center text-black rounded-full bg-[#eee] mr-2 list-icon-share"
-            @click="checkCoin"
+            @click="downloadVideo(urlVideo)"
           ></a>
           <span
             v-if="tokenUser && videoDataUser === dataUser.id"
@@ -358,12 +358,13 @@
 </template>
 
 <script>
+// import axios from 'axios'
+
 import { EmojiPicker } from 'vue-emoji-picker'
 import moment from 'moment'
 import Dialog from '../dialog/dialog.vue'
 import LoadingSignIn from '../loading/loadingSignIn.vue'
 
-// import axios from 'axios'
 import AuthService from '@/services/authService.js'
 
 export default {
@@ -466,6 +467,10 @@ export default {
       type: String,
       default: '',
     },
+    downloadVideo: {
+      type: Function,
+      default: () => 1,
+    },
   },
   data() {
     return {
@@ -527,44 +532,74 @@ export default {
     insert(emoji) {
       this.commentContent += emoji
     },
-
+    // downloadVideo(url) {
+    //   axios
+    //     .get(url, { responseType: 'blob' })
+    //     .then((response) => {
+    //       const blob = new Blob([response.data], { type: 'video/mp4' })
+    //       const link = document.createElement('a')
+    //       link.href = URL.createObjectURL(blob)
+    //       link.download = 'video'
+    //       link.click()
+    //       URL.revokeObjectURL(link.href)
+    //     })
+    //     .catch(console.error)
+    // },
     async saveComment() {
       if (this.dataUser && this.tokenUser) {
         if (this.showUpReply === false) {
-          this.showLoading = true
-          const res = await AuthService.comment({
-            content: this.commentContent,
-            video_id: this.$route.params.id,
-          })
-
-          if (res && res.status === 'success') {
-            window.console.log(res)
-            const resCmt = await AuthService.loadCommentById(
-              this.$route.params.id
-            )
-            this.$store.dispatch('actionsetListComments', resCmt.comments)
-            this.$store.dispatch('actionsetListReplyComments', resCmt.comments)
-            this.$store.dispatch('actionsetListUserLikedCmt', resCmt.comments)
-            this.commentContent = ''
-            this.showLoading = false
-
-            this.$notify({
-              type: 'success',
-              group: 'default',
-              title: 'Success',
-              text: 'Bạn vừa bình luận bài viết này',
+          if (this.commentContent !== '') {
+            this.showLoading = true
+            const res = await AuthService.comment({
+              content: this.commentContent,
+              video_id: this.$route.params.id,
             })
-          } else {
-            window.console.log('ko thành công')
-          }
-        } else {
-          this.showLoading = true
 
+            if (res && res.status === 'success') {
+              window.console.log(res)
+              const resCmt = await AuthService.loadCommentById(
+                this.$route.params.id
+              )
+              this.$store.dispatch('actionsetListComments', resCmt.comments)
+              this.$store.dispatch(
+                'actionsetListReplyComments',
+                resCmt.comments
+              )
+              this.$store.dispatch('actionsetListUserLikedCmt', resCmt.comments)
+              this.commentContent = ''
+              this.showLoading = false
+
+              this.$notify({
+                type: 'success',
+                group: 'default',
+                title: 'Success',
+                text: 'Bạn vừa bình luận bài viết này',
+              })
+              setTimeout(() => {
+                this.$notify({
+                  type: 'success',
+                  group: 'default',
+                  title: 'Thưởng',
+                  text: 'Bạn được thưởng 1 coin vào tài khoản',
+                })
+              }, 500)
+            } else {
+              window.console.log('ko thành công')
+            }
+          } else {
+            this.$notify({
+              type: 'warn',
+              group: 'default',
+              title: 'Warning',
+              text: 'Bạn chưa điền nội dung bình luận vào',
+            })
+          }
+        } else if (this.commentContent !== '') {
+          this.showLoading = true
           const res = await AuthService.reply({
             content: this.commentContent,
             comment_id: this.repCmtData.id,
           })
-
           if (res && res.status === 'success') {
             window.console.log(res)
             this.commentContent = ''
@@ -586,6 +621,14 @@ export default {
                 title: 'Success',
                 text: 'Bạn vừa trả lời bình luận bài viết này',
               })
+              setTimeout(() => {
+                this.$notify({
+                  type: 'success',
+                  group: 'default',
+                  title: 'Thưởng',
+                  text: 'Bạn được thưởng 1 coin vào tài khoản',
+                })
+              }, 500)
             } else {
               window.console.log('ko thành công')
             }
@@ -593,6 +636,13 @@ export default {
             window.console.log('ko thành công')
           }
         }
+      } else if (this.commentContent === '') {
+        this.$notify({
+          type: 'warn',
+          group: 'default',
+          title: 'Warning',
+          text: 'Bạn chưa điền nội dung bình luận vào',
+        })
       } else {
         this.$notify({
           type: 'warn',

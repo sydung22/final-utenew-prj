@@ -331,11 +331,7 @@ export default {
             uploadPreset: 'q4qrbvqz',
           })
           .then((res) => (this.src = res.secure_url))
-        if (
-          this.description !== '' &&
-          this.tags.length > 0 &&
-          this.src !== ''
-        ) {
+        if (this.description !== '' && this.tags.length > 0) {
           const res = await AuthService.uploadVideo({
             hashtags: this.tags,
             video_url: this.srcVideo,
@@ -351,8 +347,16 @@ export default {
               text: 'Tải bài đăng thành công',
             })
             setTimeout(() => {
+              this.$notify({
+                type: 'success',
+                group: 'default',
+                title: 'Thưởng',
+                text: 'Bạn được thưởng 10 coin vào tài khoản',
+              })
+            }, 700)
+            setTimeout(() => {
               this.$router.push('/')
-            }, 1000)
+            }, 1700)
           } else {
             window.console.log('upload k thành công')
           }

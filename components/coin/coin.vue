@@ -60,20 +60,22 @@
       </div>
       <div class="py-5 grid grid-cols-4 gap-4">
         <div
-          v-for="i in 8"
-          :key="i"
+          v-for="(item, index) in listCoin"
+          :key="index"
           class="border rounded inline-block px-10 py-2 text-center"
         >
           <div class="flex items-center text-lg justify-center">
-            <span class="mdi mdi-arrow-up-thick text-lg text-red-600"></span>
+            <span :class="item.up" class="mdi text-lg"></span>
             <img
               class="w-6 h-6 mr-1"
               src="https://cdn-icons-png.flaticon.com/512/306/306079.png"
               alt=""
             />
-            50
+            {{ item.amount }}
           </div>
-          <p class="font-semibold text-gray-600 italic mt-1.5">Đăng bài viết</p>
+          <p class="font-semibold text-gray-600 italic mt-1.5">
+            {{ item.code }}
+          </p>
         </div>
       </div>
     </div>
@@ -95,6 +97,38 @@ export default {
       showLoadingBox: false,
       showBoxCoin: false,
       tokenUser: '',
+      listCoin: [
+        {
+          code: 'Đăng bài viết',
+          amount: 10,
+          up: 'mdi-arrow-up-thick text-green-600',
+        },
+        {
+          code: 'Bị báo cáo bài viết',
+          amount: 5,
+          up: 'mdi-arrow-down-thick text-red-600',
+        },
+        {
+          code: 'Follow người dùng',
+          amount: 1,
+          up: 'mdi-arrow-up-thick text-green-600',
+        },
+        {
+          code: 'Like bài viết',
+          amount: 1,
+          up: 'mdi-arrow-up-thick text-green-600',
+        },
+        {
+          code: 'Comment bài viết',
+          amount: 1,
+          up: 'mdi-arrow-up-thick text-green-600',
+        },
+        {
+          code: 'Download bài viết',
+          amount: 10,
+          up: 'mdi-arrow-down-thick text-red-600',
+        },
+      ],
     }
   },
   async mounted() {

@@ -220,6 +220,29 @@ export default {
         })
         if (res && res.status === 'success') {
           this.loadVideoNotFollow()
+          if (res.message === 'Create like successfully') {
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Success',
+              text: 'Bạn vừa thích bài viết này',
+            })
+            setTimeout(() => {
+              this.$notify({
+                type: 'success',
+                group: 'default',
+                title: 'Thưởng',
+                text: 'Bạn được thưởng 1 coin vào tài khoản',
+              })
+            }, 700)
+          } else {
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Success',
+              text: 'Bạn vừa hủy thích bài viết này',
+            })
+          }
         } else {
           window.console.log('ko thành công')
         }
@@ -276,6 +299,14 @@ export default {
             title: 'Success',
             text: 'Bạn vừa theo dõi người dùng này',
           })
+          setTimeout(() => {
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Thưởng',
+              text: 'Bạn được thưởng 1 coin vào tài khoản',
+            })
+          }, 700)
         } else {
           this.$notify({
             type: 'success',

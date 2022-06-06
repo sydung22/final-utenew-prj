@@ -329,6 +329,29 @@ export default {
             window.console.log('ko thành công')
           }
         }
+        if (res && res.message === 'Follow successfully') {
+          this.$notify({
+            type: 'success',
+            group: 'default',
+            title: 'Success',
+            text: 'Bạn vừa theo dõi người dùng này',
+          })
+          setTimeout(() => {
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Thưởng',
+              text: 'Bạn được thưởng 1 coin vào tài khoản',
+            })
+          }, 700)
+        } else {
+          this.$notify({
+            type: 'success',
+            group: 'default',
+            title: 'Success',
+            text: 'Bạn vừa hủy theo dõi người dùng này',
+          })
+        }
       } else {
         window.console.log('ko thành công')
       }

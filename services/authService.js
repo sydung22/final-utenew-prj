@@ -246,6 +246,22 @@ const AuthService = {
       window.console.log('ko thành công')
     }
   },
+  async download() {
+    try {
+      this.initAuthHeader()
+      const res = await axios.post(
+        'http://127.0.0.1:8080/api/user/minus-download'
+      )
+      if (res.status === 200) {
+        return res.data
+      } else {
+        window.console.log('ko thành công')
+      }
+      return res.data
+    } catch (e) {
+      window.console.log('ko thành công')
+    }
+  },
   async video() {
     try {
       this.initAuthHeader()

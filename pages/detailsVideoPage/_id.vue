@@ -29,6 +29,7 @@
         :show-update="showUpdate"
         :delete-video="deleteVideo"
         :delete-comment="deleteComment"
+        :download-video="downloadItem"
       />
       <modal-report :show-modal="showModal" :un-show-modal="unShowModal" />
       <modal-update
@@ -45,7 +46,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import testPage from '~/components/loading/testPage.vue'
 import Videoplay from '~/components/videodetails/videoplay.vue'
 import Videocomment from '~/components/videodetails/videocomment.vue'
@@ -110,19 +111,22 @@ export default {
     this.$store.dispatch('actionsetIsUser', this.tokenUser)
     localStorage.setItem('video', JSON.stringify(this.detailsVideo))
     this.dataVideo = JSON.parse(localStorage.getItem('video'))
+    if (this.dataVideo) {
+      const resultHashtag = []
+
+      this.dataVideo.hashtags.forEach((item) => {
+        window.console.log(item.name)
+        resultHashtag.push(item.name)
+      })
+      this.listHashtags = resultHashtag.flat(99)
+    }
     await this.loadListFollowing()
     // window.console.log(this.isFollow())
     this.showSpin = false
     this.showLayout = true
-    const resultHashtag = []
     const resultPoster = []
     resultPoster.push(this.dataVideo.cover)
     this.listPosters = resultPoster.flat(99)
-    this.dataVideo.hashtags.forEach((item) => {
-      window.console.log(item.name)
-      resultHashtag.push(item.name)
-    })
-    this.listHashtags = resultHashtag.flat(99)
   },
 
   methods: {
@@ -266,6 +270,46 @@ export default {
         window.console.log('ko thành công')
       }
     },
+    async downloadItem(url) {
+      if (this.tokenUser) {
+        const res = await AuthService.download()
+        if (res && res.status === 'success') {
+          axios
+            .get(url, { responseType: 'blob' })
+            .then((response) => {
+              const blob = new Blob([response.data], { type: 'video/mp4' })
+              const link = document.createElement('a')
+              link.href = URL.createObjectURL(blob)
+              link.download = 'video'
+              link.click()
+              URL.revokeObjectURL(link.href)
+              setTimeout(() => {
+                this.$notify({
+                  type: 'error',
+                  group: 'default',
+                  title: 'Trừ Coin',
+                  text: 'Bạn bị trừ 10 coin trong tài khoản',
+                })
+              }, 2000)
+            })
+            .catch(window.console.error)
+        } else {
+          this.$notify({
+            type: 'warn',
+            group: 'default',
+            title: 'Warning',
+            text: 'Bạn chưa đủ điều kiện để tải video này',
+          })
+        }
+      } else {
+        this.$notify({
+          type: 'warn',
+          group: 'default',
+          title: 'Warning',
+          text: 'Vui lòng đăng nhập để thực hiện chức năng này',
+        })
+      }
+    },
     showReport() {
       this.showModal = true
     },
@@ -324,6 +368,29 @@ export default {
             } else {
               window.console.log('ko thành công')
             }
+          }
+          if (res && res.message === 'Follow successfully') {
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Success',
+              text: 'Bạn vừa theo dõi người dùng này',
+            })
+            setTimeout(() => {
+              this.$notify({
+                type: 'success',
+                group: 'default',
+                title: 'Thưởng',
+                text: 'Bạn được thưởng 1 coin vào tài khoản',
+              })
+            }, 700)
+          } else {
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Success',
+              text: 'Bạn vừa hủy theo dõi người dùng này',
+            })
           }
         } else {
           window.console.log('ko thành công')
