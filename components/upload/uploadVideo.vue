@@ -22,7 +22,7 @@
             <video
               :src="srcVideo"
               alt="An image example with Cloudinary"
-              class="w-full h-[400px]"
+              class="w-full h-[400px] object-contain"
               autoplay
               controls
               muted
@@ -222,6 +222,22 @@
               ></div>
             </div>
           </div>
+          <div class="mb-2">
+            <label
+              class="block text-gray-700 text-sm font-bold mb-2"
+              for="countries"
+            >
+              Chế độ xem bài đăng
+            </label>
+            <select
+              id="countries"
+              v-model="type"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+            >
+              <option value="PUBLIC" selected>Công Khai</option>
+              <option value="PRIVATE">Riêng Tư</option>
+            </select>
+          </div>
           <div class="mt-2">
             <div class="flex items-center">
               <label
@@ -295,6 +311,7 @@ export default {
       hashtag: '',
       dataLinkImg: '',
       nameFile: '',
+      type: 'PUBLIC',
       input: '',
       search: '',
       showLoadingBox: false,
@@ -337,6 +354,7 @@ export default {
             video_url: this.srcVideo,
             video_cover_url: this.src,
             description: this.description,
+            type: this.type,
           })
           if (res && res.status === 'success') {
             this.showLoadingBox = false
@@ -351,7 +369,7 @@ export default {
                 type: 'success',
                 group: 'default',
                 title: 'Thưởng',
-                text: 'Bạn được thưởng 10 coin vào tài khoản',
+                text: 'Bạn được thưởng 5 coin vào tài khoản',
               })
             }, 700)
             setTimeout(() => {

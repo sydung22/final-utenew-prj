@@ -1,5 +1,8 @@
 <template>
-  <Signup />
+  <div>
+    <Signup />
+    <notifications group="default" position="top left" />
+  </div>
 </template>
 
 <script>

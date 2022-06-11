@@ -36,7 +36,7 @@
           <div v-if="tokenUser && dataUser && detailsUser.id !== dataUser.id">
             <button
               v-if="isFollow() === false"
-              class="bg-[#fe2c55] text-white px-4 py-2 font-bold rounded-md w-[190px] hover:bg-[#c91438]"
+              class="bg-[#2563eb] text-white px-4 py-2 font-bold rounded-md w-[190px] hover:bg-[#1417c9]"
               @click="followUser(detailsUser.id)"
             >
               Follow
@@ -44,7 +44,7 @@
             <div v-else class="flex items-center">
               <nuxt-link
                 to="/ChatPage"
-                class="text-[#fe2c55] border border-[#fe2c55] py-[6px] px-[45px] font-bold rounded-md text-[18px] hover:bg-[#faeef1] duration-300"
+                class="text-[#2563eb] border border-[#2563eb] py-[6px] px-[45px] font-bold rounded-md text-[18px] hover:bg-[#d6d6f0] duration-300"
                 >Đang theo dõi</nuxt-link
               >
               <div
@@ -87,7 +87,7 @@
           </div>
           <div v-else>
             <button
-              class="bg-[#fe2c55] text-white px-4 py-2 font-bold rounded-md w-[190px]"
+              class="bg-[#2563eb] text-white px-4 py-2 font-bold rounded-md w-[190px]"
               @click="showAlert"
             >
               Follow
@@ -146,7 +146,7 @@
           }}</span></a
         >
       </div>
-      <div class="flex mb-4 pt-4 relative box-tab border-b w-[50%]">
+      <div class="flex mb-4 pt-4 relative box-tab border-b w-[76%]">
         <button
           class="tablinks w-[230px] text-[18px] font-semibold py-3"
           :style="
@@ -167,9 +167,22 @@
           "
           @click="changeComponentActive('videolike')"
         >
-          <span class="mdi mdi-lock text-[20px]"></span>
+          <span class="mdi mdi-cards-heart text-[20px]"></span>
 
           Đã Thích
+        </button>
+        <button
+          class="tablinks w-[230px] text-[18px] font-semibold py-3"
+          :style="
+            currentTab == 'videoshare'
+              ? 'border-bottom: 2px solid #000; color: #000'
+              : 'color: #bbb'
+          "
+          @click="changeComponentActive('videoshare')"
+        >
+          <span class="mdi mdi-share text-[20px]"></span>
+
+          Đã Chia Sẻ
         </button>
         <div class="border-active"></div>
       </div>
@@ -187,13 +200,15 @@
 
 import myvideo from '../../components/profile/myvideo.vue'
 import videolike from '../../components/profile/videolike.vue'
+import videoshare from '../../components/profile/videoshare.vue'
+
 import ModalEdit from '../../components/profile/modalEdit.vue'
 import AuthService from '@/services/authService.js'
 import LoadingBox from '~/components/loading/loadingBox.vue'
 
 export default {
   name: 'ProfileContainer',
-  components: { myvideo, videolike, ModalEdit, LoadingBox },
+  components: { myvideo, videolike, videoshare, ModalEdit, LoadingBox },
   layout: 'publics',
 
   data() {
@@ -208,6 +223,11 @@ export default {
           id: 2,
           component: 'videolike',
           title: 'Đã Thích',
+        },
+        {
+          id: 3,
+          component: 'videolike',
+          title: 'Đã Chia Sẻ',
         },
       ],
       currentTab: 'myvideo',
@@ -272,7 +292,7 @@ export default {
     async loadVideoUser() {
       const res = await AuthService.loadVideoByUserId(this.$route.params.id)
       if (res && res.status === 'success') {
-        this.listVideoUser = res.videos
+        this.listVideoUser = res.videos.filter((el) => el.type !== 'SHARE')
       } else {
         window.console.log('ko thành công')
       }

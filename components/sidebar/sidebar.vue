@@ -18,12 +18,13 @@
 
         Đang Follow
       </nuxt-link>
-      <div
+      <nuxt-link
+        to="/SharePage"
         class="flex font-bold px-2 py-1 items-center text-[18px] hover:bg-[#eee] duration-500 cursor-pointer tab-side"
       >
-        <span class="mdi mdi-camera-gopro text-[30px] mr-2"></span>
-        Live Room
-      </div>
+        <span class="mdi mdi-share text-[30px] mr-2"></span>
+        Được Chia Sẻ
+      </nuxt-link>
     </div>
     <div class="text-left pt-4 pb-2 border-b">
       <p class="text-[14px] text-[#413119] font-bold italic mb-2">
@@ -80,14 +81,14 @@
       </nuxt-link>
       <button
         v-if="length < 14"
-        class="italic font-bold text-[#FE2C55] inline-block mt-2"
+        class="italic font-bold text-[#2563eb] inline-block mt-2"
         @click="loadMore"
       >
         Xem Tất Cả
       </button>
       <button
         v-else
-        class="italic font-bold text-[#FE2C55] inline-block mt-2"
+        class="italic font-bold text-[#2563eb] inline-block mt-2"
         @click="loadMore"
       >
         Ẩn bớt
@@ -129,7 +130,7 @@
           <p class="font-thin text-[14px] italic">{{ item.user_2.fullname }}</p>
         </div>
       </nuxt-link>
-      <a href="#" class="italic font-bold mt-2 text-[#FE2C55] inline-block"
+      <a href="#" class="italic font-bold mt-2 text-[#2563eb] inline-block"
         >Xem Thêm</a
       >
     </div>
@@ -152,7 +153,7 @@
             :to="`/hashtagPage/${item.id}`"
             class="border leading-[18px] px-[10px] py-[3px] text-[14px] rounded-full hagstag-item"
           >
-            <span class="text-[16px] text-[#FE2C55] italic font-bold">#</span>
+            <span class="text-[16px] text-[#2563eb] italic font-bold">#</span>
             {{ item.name }}
           </nuxt-link>
         </div>

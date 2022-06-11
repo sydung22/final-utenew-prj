@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <button
-      class="bg-[#FE2C55] font-bold py-1.5 px-3 text-white rounded"
+      class="bg-[#2563eb] font-bold py-1.5 px-3 text-white rounded"
       @click="showModal = true"
     >
       Đăng Nhập
@@ -57,7 +57,7 @@
             <div class="font-semibold text-sm text-center">
               Bạn chưa có tài khoản?
               <button
-                class="text-[#FE2C55] font-bold italic hover:underline text-base"
+                class="text-[#2563eb] font-bold italic hover:underline text-base"
                 @click="clickShowSignUp"
               >
                 Đăng ký

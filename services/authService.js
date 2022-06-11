@@ -134,11 +134,27 @@ const AuthService = {
       window.console.log('ko thành công')
     }
   },
+  async getVideoShareByUser(id) {
+    try {
+      this.initAuthHeader()
+      const res = await axios.get(
+        `http://127.0.0.1:8080/api/video/user/${id}/share`
+      )
+      if (res.status === 200) {
+        return res.data
+      } else {
+        window.console.log('ko thành công')
+      }
+      return res.data
+    } catch (e) {
+      window.console.log('ko thành công')
+    }
+  },
   async updateVideo(data, id) {
     try {
       this.initAuthHeader()
       const res = await axios.put(`http://127.0.0.1:8080/api/video/${id}`, data)
-      if (res.status === 200) {
+      if (res.status === 201) {
         return res.data
       } else {
         window.console.log('ko thành công')
@@ -266,6 +282,23 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get('http://127.0.0.1:8080/api/video')
+      if (res.status === 200) {
+        return res.data
+      } else {
+        window.console.log('ko thành công')
+      }
+      return res.data
+    } catch (e) {
+      window.console.log('ko thành công')
+    }
+  },
+  async shareVideo(id, data) {
+    try {
+      this.initAuthHeader()
+      const res = await axios.post(
+        `http://127.0.0.1:8080/api/video/${id}/share`,
+        data
+      )
       if (res.status === 200) {
         return res.data
       } else {

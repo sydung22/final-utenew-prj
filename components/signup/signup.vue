@@ -29,6 +29,7 @@
                     <div class="mb-4">
                       <input
                         id="exampleFormControlInput1"
+                        v-model="signup.username"
                         type="text"
                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         placeholder="Username"
@@ -37,6 +38,7 @@
                     <div class="mb-4">
                       <input
                         id="exampleFormControlInput1"
+                        v-model="signup.fullname"
                         type="text"
                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         placeholder="Fullname"
@@ -45,6 +47,7 @@
                     <div class="mb-4">
                       <input
                         id="exampleFormControlInput1"
+                        v-model="signup.email"
                         type="email"
                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         placeholder="Email"
@@ -53,6 +56,7 @@
                     <div class="mb-4">
                       <input
                         id="exampleFormControlInput1"
+                        v-model="signup.age"
                         type="number"
                         min="18"
                         max="100"
@@ -63,6 +67,7 @@
                     <div class="mb-4">
                       <select
                         id="exampleFormControlInput1"
+                        v-model="signup.gender"
                         class="form-control block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       >
                         <option>Male</option>
@@ -73,6 +78,7 @@
                     <div class="mb-4">
                       <input
                         id="exampleFormControlInput1"
+                        v-model="signup.password"
                         type="password"
                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         placeholder="Password"
@@ -81,6 +87,7 @@
                     <div class="mb-4">
                       <input
                         id="exampleFormControlInput1"
+                        v-model="signup.confirmpassword"
                         type="password"
                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         placeholder="Confirm Password"
@@ -92,6 +99,7 @@
                         type="button"
                         data-mdb-ripple="true"
                         data-mdb-ripple-color="light"
+                        @click="signUp"
                       >
                         Đăng ký
                       </button>
@@ -114,6 +122,7 @@
                       </nuxt-link>
                     </div>
                   </form>
+                  <loading-sign-in v-show="showLoadingSignUp"></loading-sign-in>
                 </div>
               </div>
               <div
@@ -134,7 +143,61 @@
 </template>
 
 <script>
+import loadingSignIn from '../loading/loadingSignIn.vue'
+
+import AuthService from '@/services/authService.js'
+
 export default {
   name: 'SignUpContainer',
+  components: { loadingSignIn },
+  data() {
+    return {
+      showLoadingSignUp: false,
+      signup: {
+        gender: 'Male',
+      },
+    }
+  },
+  methods: {
+    async signUp() {
+      if (this.signup.password === this.signup.confirmpassword) {
+        this.showLoadingSignUp = true
+        try {
+          const res = await AuthService.register(this.signup)
+
+          // this.$store.dispatch('actionsetDataUser', data)
+          if (res && res.status === 'success') {
+            this.showLoadingSignUp = false
+            window.console.log(res)
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Success',
+              text: 'Đăng ký thành công! Hãy đăng nhập lại',
+            })
+            setTimeout(() => this.$router.push('/LoginPage'), 1000)
+          } else {
+            window.console.log('ko thành công')
+          }
+        } catch (err) {
+          this.showLoadingSignUp = false
+
+          this.$notify({
+            type: 'error',
+            group: 'default',
+            title: 'Error',
+            text: 'Đăng ký không thành công! Vui lòng thử lại',
+          })
+        }
+      } else {
+        this.$notify({
+          type: 'warn',
+          group: 'default',
+          title: 'Warning',
+          text: 'Mật khẩu xác thực không trùng khớp',
+        })
+      }
+    },
+  },
 }
 </script>

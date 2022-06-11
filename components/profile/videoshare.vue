@@ -13,10 +13,10 @@
         <div class="loading-item" :style="`width: 220px; height: 276px;`"></div>
       </loading-box>
       <nuxt-link
-        v-for="(item, index) in listVideoLike"
+        v-for="(item, index) in listVideoShare"
         :key="index"
         :to="`/detailsVideoPage/${item.id}`"
-        class="w-[220px] h-[300px] py-3 relative text-left list-videolike"
+        class="w-[220px] h-[300px] py-3 relative text-left list-video-share"
       >
         <video
           ref="videoRef"
@@ -44,9 +44,28 @@
             >{{ item.views }}</strong
           >
         </div>
-        <p class="mt-2 ml-1 box-des line-clamp-1">
-          {{ item.description }}
-        </p>
+        <p class="text-left line-clamp-1 mt-1.5">{{ item.description }}</p>
+        <div class="flex flex-wrap">
+          <nuxt-link
+            v-for="(itemHashtag, indexHashtag) in item.hashtags"
+            :key="indexHashtag"
+            :to="`/hashtagPage/${itemHashtag.id}`"
+            class="font-bold text-[14px] items-center my-1 hover:underline mr-4"
+          >
+            #{{ itemHashtag.name }}
+          </nuxt-link>
+        </div>
+        <nuxt-link
+          :to="`/profilePage/${item.user.id}`"
+          class="flex items-center font-serif mt-1.5 box-profile"
+        >
+          <img
+            :src="item.user.avatar"
+            alt=""
+            class="w-[24px] h-[24px] rounded-full object-cover mr-2"
+          />
+          <a class="profile-username">{{ item.user.username }}</a>
+        </nuxt-link>
       </nuxt-link>
     </div>
     <div v-else class="text-center pt-[80px]">
@@ -56,7 +75,7 @@
         class="w-[120px] h-[120px] mx-auto"
       />
       <h2 class="text-[24px] font-bold mb-2">
-        Video đã thích của người dùng này ở trạng thái riêng tư
+        Video đã chia sẻ của người dùng này ở trạng thái riêng tư
       </h2>
       <p>Các video được thích bởi người dùng này hiện đang ẩn</p>
     </div>
@@ -70,19 +89,13 @@ import loadingBox from '../loading/loadingBox.vue'
 import AuthService from '@/services/authService.js'
 
 export default {
-  name: 'VideoLikeContainer',
+  name: 'VideoShareContainer',
   components: { loadingBox },
 
-  props: {
-    userName: {
-      type: String,
-      default: '',
-    },
-  },
   data() {
     return {
       tokenUser: '',
-      listVideoLike: [],
+      listVideoShare: [],
       dataUser: {},
       showLoadingData: false,
     }
@@ -92,23 +105,17 @@ export default {
     this.tokenUser = resUser
     this.dataUser = JSON.parse(localStorage.getItem('user'))
     if (this.dataUser && this.tokenUser) {
-      await this.loadVideoLiked()
+      await this.loadVideoShared()
     }
-    // if (this.dataUser) {
-    //   const resListVideoLikes = await axios.get(
-    //     `http://127.0.0.1:8000/api/count_video_like/${this.dataUser.id}`
-    //   )
-    //   this.listVideoLike = resListVideoLikes.data.data
-    // }
   },
   methods: {
-    async loadVideoLiked() {
+    async loadVideoShared() {
       if (this.tokenUser && this.dataUser) {
         this.showLoadingData = true
-        const res = await AuthService.loadVideoLiked()
+        const res = await AuthService.getVideoShareByUser(this.dataUser.id)
         if (res && res.status === 'success') {
           this.showLoadingData = false
-          this.listVideoLike = res.videos
+          this.listVideoShare = res.videos
           window.console.log(res)
           window.console.log('thành công')
         } else {
@@ -121,7 +128,7 @@ export default {
 </script>
 <style scoped>
 @media (max-width: 1401px) {
-  .list-videolike {
+  .list-video-share {
     width: auto;
     height: auto;
   }

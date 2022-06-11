@@ -8,14 +8,27 @@
           v-for="(item, index) in listVideo"
           :key="index"
           :to="`/detailsVideoPage/${item.id}`"
-          class="py-3 relative w-[250px] h-[350px]"
+          class="py-3 relative w-[260px] h-full"
         >
           <video
+            ref="videoRef"
             :poster="item.background_video"
-            class="block w-full h-full object-cover rounded-md videoplay"
+            class="block w-full h-[350px] object-cover rounded-md videoplay"
             :src="item.url"
+            muted
+            @mouseenter="videoPlay(index)"
+            @mouseleave="videoPause(index)"
           ></video>
-          <div class="absolute bottom-[1.5rem] left-3 flex items-center">
+          <div
+            class="absolute left-3 flex items-center"
+            :style="
+              item.hashtags.length > 0
+                ? { bottom: '7rem' }
+                : {
+                    bottom: '5rem',
+                  }
+            "
+          >
             <svg
               class="mr-1"
               width="18"
@@ -32,7 +45,7 @@
             ><strong
               data-e2e="video-views"
               class="text-[#fff] text-[17px] italic"
-              >65.9K</strong
+              >{{ item.views }}</strong
             >
           </div>
           <p class="text-left line-clamp-1 mt-1.5">{{ item.description }}</p>
@@ -89,10 +102,18 @@ export default {
   methods: {
     getVideos() {
       if (this.getTitleSearch) {
-        this.listVideo = this.getListVideos
+        this.listVideo = this.getListVideos.filter((el) => el.type === 'PUBLIC')
       } else {
         window.console.log('No videos')
       }
+    },
+    videoPlay(index) {
+      const listVideo = this.$refs.videoRef
+      listVideo[index].play()
+    },
+    videoPause(index) {
+      const listVideo = this.$refs.videoRef
+      listVideo[index].pause()
     },
   },
 }

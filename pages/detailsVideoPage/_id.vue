@@ -30,6 +30,9 @@
         :delete-video="deleteVideo"
         :delete-comment="deleteComment"
         :download-video="downloadItem"
+        :handle-row="handleRow"
+        :show-dialog-delete="showDialogDelete"
+        :un-show-dialog-delete="unShowDialogDelete"
       />
       <modal-report :show-modal="showModal" :un-show-modal="unShowModal" />
       <modal-update
@@ -54,10 +57,8 @@ import ModalReport from '~/components/videodetails/modalReport.vue'
 import AuthService from '@/services/authService.js'
 import ModalUpdate from '~/components/videodetails/modalUpdate.vue'
 import LoadingSignIn from '~/components/loading/loadingSignIn.vue'
-
 export default {
   name: 'DetailsVideo',
-
   components: {
     testPage,
     Videoplay,
@@ -83,6 +84,9 @@ export default {
       listHashtags: [],
       listPosters: [],
       showLoading: false,
+      idDelete: null,
+      showDialogDelete: false,
+      listCheckContent: [],
     }
   },
   computed: {
@@ -110,10 +114,10 @@ export default {
     this.tokenUser = localStorage.getItem('token')
     this.$store.dispatch('actionsetIsUser', this.tokenUser)
     localStorage.setItem('video', JSON.stringify(this.detailsVideo))
+    this.setUrl = `http://localhost:3000/detailsVideoPage/${this.$route.params.id}`
     this.dataVideo = JSON.parse(localStorage.getItem('video'))
     if (this.dataVideo) {
       const resultHashtag = []
-
       this.dataVideo.hashtags.forEach((item) => {
         window.console.log(item.name)
         resultHashtag.push(item.name)
@@ -128,8 +132,14 @@ export default {
     resultPoster.push(this.dataVideo.cover)
     this.listPosters = resultPoster.flat(99)
   },
-
   methods: {
+    handleRow(item) {
+      this.showDialogDelete = true
+      this.idDelete = item.id
+    },
+    unShowDialogDelete() {
+      this.showDialogDelete = false
+    },
     checkLikedCmt(index) {
       const resUser = JSON.parse(localStorage.getItem('user'))
       if (resUser) {
@@ -184,10 +194,30 @@ export default {
         })
       }
     },
+    async loadVideo() {
+      const res = await AuthService.video()
+      if (res && res.status === 'success') {
+        this.listCheckContent = res.videos
+      } else {
+        window.console.log('ko thành công')
+      }
+    },
     async deleteVideo() {
       this.showLoading = true
       const res = await AuthService.deleteVideo(Number(this.$route.params.id))
       if (res && res.status === 'success') {
+        await this.loadVideo()
+        const data = this.listCheckContent.filter(
+          (el) => el.share_video_id === Number(this.$route.params.id)
+        )
+        data.forEach((el) => {
+          AuthService.deleteVideo(el.id)
+          if (res && res.status === 'success') {
+            window.console.log('xóa video chia sẻ thành công')
+          } else {
+            window.console.log('xóa video không chia sẻ thành công')
+          }
+        })
         this.showLoading = false
         this.$notify({
           type: 'success',
@@ -202,9 +232,9 @@ export default {
         window.console.log('ko thành công')
       }
     },
-    async deleteComment(id) {
+    async deleteComment() {
       this.showLoading = true
-      const res = await AuthService.deleteComment(id)
+      const res = await AuthService.deleteComment(this.idDelete)
       if (res && res.status === 'success') {
         const resCmt = await AuthService.loadCommentById(this.$route.params.id)
         this.$store.dispatch('actionsetListComments', resCmt.comments)
@@ -311,7 +341,16 @@ export default {
       }
     },
     showReport() {
-      this.showModal = true
+      if (this.tokenUser && this.dataUser) {
+        this.showModal = true
+      } else {
+        this.$notify({
+          type: 'warn',
+          group: 'default',
+          title: 'Warning',
+          text: 'Vui lòng đăng nhập để thực hiện chức năng này',
+        })
+      }
     },
     unShowModal() {
       this.showModal = false
@@ -363,7 +402,6 @@ export default {
                 'actionsetListUserFollowings',
                 res.user.followings
               )
-
               window.console.log('thành công')
             } else {
               window.console.log('ko thành công')

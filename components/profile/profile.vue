@@ -14,7 +14,7 @@
         <div class="flex items-center">
           <a
             href="#"
-            class="text-[#fe2c55] border border-[#fe2c55] py-[6px] px-[45px] font-bold rounded-md text-[18px] hover:bg-[#faeef1] duration-300"
+            class="text-[#2563eb] border border-[#2563eb] py-[6px] px-[45px] font-bold rounded-md text-[18px] hover:bg-[#d6d6f0] duration-300"
             >Tin nhắn</a
           >
           <div
@@ -106,6 +106,19 @@
 
         Đã Thích
       </button>
+      <button
+        class="tablinks w-[230px] text-[18px] font-semibold py-3"
+        :style="
+          currentTab == 'videoshare'
+            ? 'border-bottom: 2px solid #000; color: #000'
+            : 'color: #bbb'
+        "
+        @click="changeComponentActive('videoshare')"
+      >
+        <span class="mdi mdi-lock text-[20px]"></span>
+
+        Đã Chia Sẻ
+      </button>
       <div class="border-active"></div>
     </div>
     <component :is="currentTab"></component>
@@ -115,9 +128,11 @@
 <script>
 import myvideo from './myvideo.vue'
 import videolike from './videolike.vue'
+import videoshare from './videoshare.vue'
+
 export default {
   name: 'ProfileContainer',
-  components: { myvideo, videolike },
+  components: { myvideo, videolike, videoshare },
   data() {
     return {
       tabs: [
@@ -130,6 +145,11 @@ export default {
           id: 2,
           component: 'videolike',
           title: 'Đã Thích',
+        },
+        {
+          id: 3,
+          component: 'videoshare',
+          title: 'Đã Chia Sẻ',
         },
       ],
       currentTab: 'myvideo',

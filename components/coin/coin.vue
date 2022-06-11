@@ -100,7 +100,7 @@ export default {
       listCoin: [
         {
           code: 'Đăng bài viết',
-          amount: 10,
+          amount: 5,
           up: 'mdi-arrow-up-thick text-green-600',
         },
         {

@@ -1,5 +1,5 @@
 <template>
-  <div class="border-b py-2">
+  <div class="border-b py-2" @click="showSearchBox = false">
     <div class="flex justify-between items-center w-[1170px] mx-auto">
       <a href="/" class="flex ml-2 items-center"
         ><img
@@ -190,8 +190,9 @@ export default {
       if (res && res.status === 'success') {
         this.$store.dispatch('actionSetTitleInfo', this.searchTitle)
         this.$store.dispatch('actionSetListAccount', res.result.users)
-        this.$store.dispatch('actionSetListVideos', res.result.videos)
         this.$router.push('/SearchPage')
+
+        this.$store.dispatch('actionSetListVideos', res.result.videos)
       } else {
         this.$router.push('/')
         window.console.log('ko thành công')
@@ -210,6 +211,9 @@ export default {
           this.showSearchBox = true
           this.$store.dispatch('actionSetTitleInfo', this.searchTitle)
           this.$store.dispatch('actionSetListAccount', res.result.users)
+          if (this.$route.fullPath === '/SearchPage') {
+            this.$store.dispatch('actionSetListVideos', res.result.videos)
+          }
           this.showLoading = false
           this.showClose = true
         }

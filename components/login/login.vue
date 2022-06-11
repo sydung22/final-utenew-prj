@@ -179,26 +179,37 @@ export default {
         })
       } else {
         this.showLoadingLogin = true
-        const res = await AuthService.login({
-          email: this.emailInput,
-          password: this.passwordInput,
-        })
-
-        // this.$store.dispatch('actionsetDataUser', data)
-        if (res && res.access_token !== '') {
-          window.console.log(res)
-          this.showLoadingLogin = false
-          this.$notify({
-            type: 'success',
-            group: 'default',
-            title: 'Success',
-            text: 'Đăng nhập thành công',
+        try {
+          const res = await AuthService.login({
+            email: this.emailInput,
+            password: this.passwordInput,
           })
-          const tokenUser = localStorage.getItem('token')
-          this.$store.dispatch('actionsetIsUser', tokenUser)
-          setTimeout(() => this.$router.push('/'), 1000)
-        } else {
-          window.console.log('ko thành công')
+
+          // this.$store.dispatch('actionsetDataUser', data)
+          if (res && res.access_token !== '') {
+            window.console.log(res)
+            this.showLoadingLogin = false
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Success',
+              text: 'Đăng nhập thành công! Đang vào trang chủ',
+            })
+            const tokenUser = localStorage.getItem('token')
+            this.$store.dispatch('actionsetIsUser', tokenUser)
+            setTimeout(() => this.$router.push('/'), 1000)
+          } else {
+            window.console.log('ko thành công')
+          }
+        } catch (err) {
+          this.showLoadingLogin = false
+
+          this.$notify({
+            type: 'error',
+            group: 'default',
+            title: 'Error',
+            text: 'Đăng nhập thất bại! Vui lòng thử lại',
+          })
         }
       }
     },

@@ -47,19 +47,30 @@
         <div
           v-for="(item, index) in listVideo"
           :key="index"
-          class="w-[250px] h-[350px] py-3"
+          class="w-[260px] h-full py-3"
+          @mouseenter="videoPlay(index)"
+          @mouseleave="videoPause(index)"
         >
           <nuxt-link
             :to="`/detailsVideoPage/${item.id}`"
-            class="relative w-[300px] h-[400px]"
+            class="relative block"
           >
             <video
+              ref="videoRef"
               :poster="item.background_video"
-              class="block w-full h-full object-cover rounded-md videoplay"
+              class="block w-full h-[350px] object-cover rounded-md videoplay"
               :src="item.url"
+              muted
             ></video>
             <div
-              class="absolute bottom-[4.5rem] left-[-7.25rem] flex items-center"
+              class="absolute left-[10px] flex items-center"
+              :style="
+                item.hashtags.length > 0
+                  ? { bottom: '4.5rem' }
+                  : {
+                      bottom: '2.5rem',
+                    }
+              "
             >
               <svg
                 class="mr-1"
@@ -77,7 +88,7 @@
               ><strong
                 data-e2e="video-views"
                 class="text-[#fff] text-[17px] italic"
-                >65.9K</strong
+                >{{ item.views }}</strong
               >
             </div>
             <p class="text-left line-clamp-1 mt-1.5">{{ item.description }}</p>
@@ -148,16 +159,26 @@ export default {
     getVideos() {
       if (this.getTitleSearch) {
         this.listVideo = this.getListVideos
+          .filter((el) => el.type === 'PUBLIC')
+          .slice(0, 6)
       } else {
         window.console.log('No videos')
       }
     },
     getAccount() {
       if (this.getTitleSearch) {
-        this.listUser = this.getListAccount
+        this.listUser = this.getListAccount.slice(0, 6)
       } else {
         window.console.log('No account')
       }
+    },
+    videoPlay(index) {
+      const listVideo = this.$refs.videoRef
+      listVideo[index].play()
+    },
+    videoPause(index) {
+      const listVideo = this.$refs.videoRef
+      listVideo[index].pause()
     },
   },
 }

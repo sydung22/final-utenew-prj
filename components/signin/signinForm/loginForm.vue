@@ -101,7 +101,7 @@
     </div>
 
     <button
-      class="text-white bg-[#FE2C55] font-bold w-full flex items-center justify-center py-3 rounded-md mb-5 mt-6 hover:bg-[#fc466b]"
+      class="text-white bg-[#2563eb] font-bold w-full flex items-center justify-center py-3 rounded-md mb-5 mt-6 hover:bg-[#1411c0]"
       @click="login"
     >
       Đăng Nhập
@@ -110,7 +110,7 @@
       <div class="font-semibold text-sm text-center">
         Bạn chưa có tài khoản?
         <button
-          class="text-[#FE2C55] font-bold italic hover:underline text-base"
+          class="text-[#2563eb] font-bold italic hover:underline text-base"
           @click="clickShowSignUp"
         >
           Đăng ký
@@ -191,20 +191,26 @@ export default {
     },
     async login() {
       this.showLoadingLogin = true
-      const res = await AuthService.login({
-        email: this.emailInput,
-        password: this.passwordInput,
-      })
+      try {
+        const res = await AuthService.login({
+          email: this.emailInput,
+          password: this.passwordInput,
+        })
 
-      // this.$store.dispatch('actionsetDataUser', data)
-      if (res && res.access_token !== '') {
-        window.console.log(res)
+        // this.$store.dispatch('actionsetDataUser', data)
+        if (res && res.access_token !== '') {
+          this.showAlertFail = false
+          window.console.log(res)
+          this.showLoadingLogin = false
+          this.showAlertSuccess = true
+          setTimeout(() => window.location.reload(), 1000)
+        } else {
+          this.showAlertFail = true
+          window.console.log('ko thành công')
+        }
+      } catch (err) {
         this.showLoadingLogin = false
-        this.showAlertSuccess = true
-        setTimeout(() => window.location.reload(), 1000)
-      } else {
         this.showAlertFail = true
-        window.console.log('ko thành công')
       }
     },
   },

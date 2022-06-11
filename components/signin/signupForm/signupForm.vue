@@ -129,6 +129,7 @@
       </label>
       <input
         id="confirmpassword"
+        v-model="signup.confirmpassword"
         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         type="password"
         placeholder="********"
@@ -136,7 +137,7 @@
     </div>
 
     <button
-      class="text-white bg-[#FE2C55] font-bold w-full flex items-center justify-center py-3 rounded-md my-5"
+      class="text-white bg-[#2563eb] font-bold w-full flex items-center justify-center py-3 rounded-md my-5 hover:bg-[#1411c0]"
       @click="signUp"
     >
       Đăng Ký
@@ -145,21 +146,24 @@
       <div class="font-semibold text-sm text-center">
         Bạn đã có tài khoản?
         <button
-          class="text-[#FE2C55] font-bold italic hover:underline text-base"
+          class="text-[#2563eb] font-bold italic hover:underline text-base"
           @click="clickShowSignIn"
         >
           Đăng nhập
         </button>
       </div>
     </div>
+    <loading-sign-in v-show="showLoadingSignUp"></loading-sign-in>
   </div>
 </template>
 
 <script>
 import AuthService from '@/services/authService.js'
+import loadingSignIn from '~/components/loading/loadingSignIn.vue'
 
 export default {
   name: 'SignUpForm',
+  components: { loadingSignIn },
 
   props: {
     showModalSignUp: Boolean,
@@ -175,21 +179,31 @@ export default {
       },
       showAlertFail: false,
       showAlertSuccess: false,
+      showLoadingSignUp: false,
     }
   },
   methods: {
     async signUp() {
       if (this.signup.password === this.signup.confirmpassword) {
-        const res = await AuthService.register(this.signup)
+        this.showLoadingSignUp = true
+        try {
+          const res = await AuthService.register(this.signup)
 
-        // this.$store.dispatch('actionsetDataUser', data)
-        if (res && res.status === 'success') {
-          window.console.log(res)
-          this.showAlertSuccess = true
-          setTimeout(() => window.location.reload(), 1000)
-        } else {
+          // this.$store.dispatch('actionsetDataUser', data)
+          if (res && res.status === 'success') {
+            this.showLoadingSignUp = false
+            this.showAlertFail = false
+            window.console.log(res)
+            this.showAlertSuccess = true
+            setTimeout(() => window.location.reload(), 1000)
+          } else {
+            this.showAlertFail = true
+            window.console.log('ko thành công')
+          }
+        } catch (err) {
+          this.showLoadingSignUp = false
+
           this.showAlertFail = true
-          window.console.log('ko thành công')
         }
       } else {
         this.$notify({

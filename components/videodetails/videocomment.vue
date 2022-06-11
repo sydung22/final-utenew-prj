@@ -14,18 +14,18 @@
           </div>
         </div>
         <!-- <button
-          class="border rounded-md text-[#FE2C55] border-[#FE2C55] font-semibold px-8 py-1.5"
+          class="border rounded-md text-[#2563eb] border-[#2563eb] font-semibold px-8 py-1.5"
         >
           Follow
         </button> -->
         <button
           v-if="tokenUser && videoDataUser !== dataUser.id"
-          class="text-[#fe2c55] border border-[#fe2c55] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#faeef1] duration-300"
+          class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300"
           :style="
             !isFollow()
               ? {
-                  color: '#fe2c55',
-                  border: '1px solid #fe2c55',
+                  color: '#2563eb',
+                  border: '1px solid #2563eb',
                   padding: '6px 32px',
                 }
               : {
@@ -59,7 +59,7 @@
               <button
                 class="mdi mdi-heart text-[20px] cursor-pointer button-heart w-[32px] h-[32px]"
                 :style="
-                  isLikedVideo() ? { color: '#fe2c55' } : { color: '#000' }
+                  isLikedVideo() ? { color: '#2563eb' } : { color: '#000' }
                 "
                 @click="changeHeart"
               ></button>
@@ -105,7 +105,7 @@
           ></a>
           <span
             v-if="tokenUser && videoDataUser === dataUser.id"
-            class="mdi mdi-pencil-box-outline text-[15px] w-7 h-7 flex items-center justify-center bg-[#FE2C55] text-white rounded-full mr-2 list-icon-share"
+            class="mdi mdi-pencil-box-outline text-[15px] w-7 h-7 flex items-center justify-center bg-[#2563eb] text-white rounded-full mr-2 list-icon-share"
             @click="showUpdate"
           ></span>
           <a
@@ -175,10 +175,17 @@
                   Trả Lời
                 </p>
                 <span
-                  v-if="tokenUser && videoDataUser === dataUser.id"
+                  v-if="tokenUser && item.user.id === dataUser.id"
                   class="mdi mdi-delete-outline text-[16px] cursor-pointer"
-                  @click="deleteComment(item.id)"
+                  @click="handleRow(item)"
                 ></span>
+                <Dialog
+                  :show="showDialogDelete"
+                  title="Thông báo"
+                  description="Bạn có muốn xóa bình luận này không ??"
+                  :confirm="deleteComment"
+                  :cancel="unShowDialogDelete"
+                ></Dialog>
               </div>
               <span
                 v-if="getListReplyComments[index].replies.length > 0"
@@ -228,7 +235,7 @@
                       class="mdi mdi-heart text-[20px] cursor-pointer button-heart w-[25px] h-[25px] rounded-full"
                       :style="
                         isLikedReply(index, indexReply)
-                          ? { color: '#fe2c55' }
+                          ? { color: '#2563eb' }
                           : { color: '#000' }
                       "
                       @click="onLikeReply(itemReply.id)"
@@ -246,7 +253,7 @@
             <button
               class="mdi mdi-heart text-[20px] cursor-pointer button-heart w-[25px] h-[25px] rounded-full"
               :style="
-                isLikedComment(index) ? { color: '#fe2c55' } : { color: '#000' }
+                isLikedComment(index) ? { color: '#2563eb' } : { color: '#000' }
               "
               @click="onLikeComment(item.id)"
             ></button>
@@ -346,7 +353,7 @@
           </emoji-picker>
         </div>
         <button
-          class="text-[16px] text-white bg-[#FE2C55] ml-4 font-semibold py-1.5 px-5 rounded-md hover:opacity-80 duration-200"
+          class="text-[16px] text-white bg-[#2563eb] ml-4 font-semibold py-1.5 px-5 rounded-md hover:opacity-80 duration-200"
           @click="saveComment"
         >
           Đăng
@@ -468,6 +475,18 @@ export default {
       default: '',
     },
     downloadVideo: {
+      type: Function,
+      default: () => 1,
+    },
+    handleRow: {
+      type: Function,
+      default: () => 1,
+    },
+    showDialogDelete: {
+      type: Boolean,
+      default: false,
+    },
+    unShowDialogDelete: {
       type: Function,
       default: () => 1,
     },
@@ -635,14 +654,14 @@ export default {
           } else {
             window.console.log('ko thành công')
           }
+        } else if (this.commentContent === '') {
+          this.$notify({
+            type: 'warn',
+            group: 'default',
+            title: 'Warning',
+            text: 'Bạn chưa điền nội dung bình luận vào',
+          })
         }
-      } else if (this.commentContent === '') {
-        this.$notify({
-          type: 'warn',
-          group: 'default',
-          title: 'Warning',
-          text: 'Bạn chưa điền nội dung bình luận vào',
-        })
       } else {
         this.$notify({
           type: 'warn',
@@ -709,11 +728,11 @@ export default {
   height: 100%;
   opacity: 0;
   transition: all 0.4s;
-  box-shadow: 0 0 10px 30px #fe2c55;
+  box-shadow: 0 0 10px 30px #2563eb;
 }
 
 .button-heart:active::after {
-  box-shadow: 0 0 0 0 #fe2c55;
+  box-shadow: 0 0 0 0 #2563eb;
   position: absolute;
   border-radius: 50%;
   left: 0;

@@ -11,6 +11,13 @@
       <div class="loading-item" :style="`width: 70%;`"></div>
       <div class="loading-item" :style="`width: 80%;`"></div>
     </loading-box>
+    <dialog-share
+      :show-modal="showModalShare"
+      :un-show-modal="unShowModalShare"
+      :data-share-obj="detailsVideoShare"
+      :data-user-obj="detailsItemUser"
+      :data-user-share-obj="detailsUserShare"
+    ></dialog-share>
     <div
       v-for="(item, index) in listContentFollow"
       :key="index"
@@ -66,7 +73,7 @@
             </div>
           </nuxt-link>
           <!-- <button
-            class="text-[#fe2c55] border border-[#fe2c55] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#faeef1] duration-300"
+            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300"
             :style="
               changeColorFollow
                 ? {
@@ -74,7 +81,7 @@
                     border: '1px solid #aaa',
                     padding: '2px 14px',
                   }
-                : { color: '#fe2c55', border: '1px solid #fe2c55' }
+                : { color: '#2563eb', border: '1px solid #2563eb' }
             "
             @click="changeFollow"
           >
@@ -86,26 +93,34 @@
             :to="`/detailsVideoPage/${item.id}`"
             class="w-[70%] h-[50%] py-3"
           >
-            <video
-              id="videoplay"
-              ref="videoRef"
-              class="block w-full h-auto object-cover rounded-md videoplay"
-              controls
-              :src="item.url"
-              :poster="item.background_video"
-            ></video>
+            <div
+              class="h-[500px] w-full relative z-10 bg-black overflow-hidden rounded-xl"
+            >
+              <div
+                class="back-blur"
+                :style="`background-image: url('${item.cover}')`"
+              ></div>
+              <video
+                ref="videoRef"
+                class="block w-full h-full object-contain rounded-md videoplay relative z-10"
+                controls
+                :src="item.url"
+                :poster="item.background_video"
+                muted
+              ></video>
+            </div>
           </nuxt-link>
           <div class="ml-5 text-center">
             <div class="pb-2">
               <a
-                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] cursor-pointer"
+                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] cursor-pointer button-heart"
                 @click="changeHeart(item.id)"
               >
                 <span
                   class="mdi mdi-heart text-[27px]"
                   :style="
                     checkLikedVideo(index)
-                      ? { color: '#fe2c55' }
+                      ? { color: '#2563eb' }
                       : { color: '#000' }
                   "
                 ></span
@@ -118,7 +133,7 @@
             <div class="pb-2">
               <nuxt-link
                 :to="`/detailsVideoPage/${item.id}`"
-                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee]"
+                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] button-heart"
               >
                 <img
                   src="./assets/img/icon-comment.png"
@@ -129,14 +144,25 @@
                 {{ item.comments.length }}
               </p>
             </div>
+            <div class="pb-2">
+              <a
+                href="#"
+                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee]"
+              >
+                <span class="mdi mdi-eye text-black text-[21px]"></span
+              ></a>
+              <p class="text-[12px] font-semibold text-[#000] my-1">
+                {{ item.views }}
+              </p>
+            </div>
 
             <a
-              href="#"
-              class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee]"
+              class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] button-heart"
+              @click="getDataShare(item.id)"
             >
-              <img src="./assets/img/icon-share.png" alt="" class="w-[21px]"
-            /></a>
-            <p class="text-[12px] font-semibold text-[#000] my-1">751</p>
+              <span class="mdi mdi-share text-[21px]"></span>
+            </a>
+            <p class="text-[12px] font-semibold text-[#000] my-1">Chia sẻ</p>
           </div>
         </div>
       </div>
@@ -146,10 +172,13 @@
 
 <script>
 // import axios from 'axios'
+import dialogShare from '../content/dialogShare.vue'
+
 import AuthService from '@/services/authService.js'
 
 export default {
   name: 'ContentContainer',
+  components: { dialogShare },
 
   data() {
     return {
@@ -161,6 +190,10 @@ export default {
       listContentFollow: [],
       showLoading: false,
       tokenUser: '',
+      showModalShare: false,
+      detailsVideoShare: {},
+      detailsItemUser: {},
+      detailsUserShare: {},
     }
   },
   computed: {
@@ -176,16 +209,50 @@ export default {
       this.dataUser = JSON.parse(localStorage.getItem('user'))
       await this.loadVideoIsFollow()
       this.showLoading = false
+    } else {
+      this.$notify({
+        type: 'warn',
+        group: 'default',
+        title: 'Warning',
+        text: 'Vui lòng đăng nhập để vào trang này',
+      })
+      setTimeout(() => this.$router.push('/'), 1000)
     }
     // this.listContent.sort(() => Math.random() - 0.5)
     window.console.log(this.listContent)
   },
   methods: {
+    unShowModalShare() {
+      this.showModalShare = false
+    },
+    async getDataShare(id) {
+      if (this.tokenUser) {
+        const res = await AuthService.loadVideoById(id)
+        if (res && res.status === 'success') {
+          this.detailsVideoShare = res.video
+          this.detailsItemUser = res.video.user
+          this.detailsUserShare = this.dataUser
+          this.$store.dispatch('actionsetListUserLiked', res.video.likes)
+          this.showModalShare = true
+
+          window.console.log('thành công')
+        } else {
+          window.console.log('ko thành công')
+        }
+      } else {
+        this.$notify({
+          type: 'warn',
+          group: 'default',
+          title: 'Warning',
+          text: 'Vui lòng đăng nhập để thực hiện chức năng này',
+        })
+      }
+    },
     async loadVideoIsFollow() {
       const res = await AuthService.videoIsFollow()
       if (res && res.status === 'success') {
-        this.listContentFollow = res.video
-        this.$store.dispatch('actionSetListVideos', res.video)
+        this.listContentFollow = res.video.filter((el) => el.type === 'PUBLIC')
+        this.$store.dispatch('actionSetListVideos', this.listContentFollow)
         window.console.log('thành công')
       } else {
         this.$router.push('/')
@@ -240,6 +307,18 @@ export default {
 }
 </script>
 <style scoped>
+.back-blur {
+  position: absolute;
+  width: 10%;
+  height: 10%;
+  filter: blur(0.5px);
+  left: 50%;
+  top: 50%;
+  transform: scale(11);
+  opacity: 0.3;
+  background: center center / cover no-repeat;
+}
+
 .sidebar-right::-webkit-scrollbar-track {
   background-color: #fff;
   border-radius: 20px;
@@ -255,6 +334,38 @@ export default {
   background-color: #ddd;
 }
 
+.button-heart {
+  transition-duration: 0.3s;
+  position: relative;
+}
+
+.button-heart::after {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 0.4s;
+  box-shadow: 0 0 10px 30px #2563eb;
+}
+
+.button-heart:active::after {
+  box-shadow: 0 0 0 0 #2563eb;
+  position: absolute;
+  border-radius: 50%;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  transition: 0s;
+}
+
+.button-heart:active {
+  transform: translateY(5px);
+}
 @media (max-width: 1401px) {
   .sidebar-right {
     width: 890px;

@@ -220,6 +220,22 @@
                   />
                 </div>
               </div>
+              <div class="mb-2">
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  for="countries"
+                >
+                  Chế độ xem bài đăng
+                </label>
+                <select
+                  id="countries"
+                  v-model="item.type"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                >
+                  <option value="PUBLIC">Công Khai</option>
+                  <option value="PRIVATE">Riêng Tư</option>
+                </select>
+              </div>
               <div class="mt-2">
                 <div class="flex items-center">
                   <label
@@ -375,6 +391,7 @@ export default {
               video_url: this.item.url,
               video_cover_url: this.src,
               description: this.item.description,
+              type: this.item.type,
             },
             Number(this.$route.params.id)
           )

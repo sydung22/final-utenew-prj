@@ -11,6 +11,20 @@
       <div class="loading-item" :style="`width: 70%;`"></div>
       <div class="loading-item" :style="`width: 80%;`"></div>
     </loading-box>
+    <Dialog
+      :show="showDialog"
+      title="Thông báo"
+      description="Bạn có muốn xóa bài viết này không ??"
+      :confirm="deleteVideoShare"
+      :cancel="unShowDialog"
+    ></Dialog>
+    <dialog-update-share
+      :show-modal="showModalUpdate"
+      :un-show-modal="unShowModalUpdate"
+      :data-share-obj="detailsVideoUpdate"
+      :data-user-obj="detailsItemUserUpdate"
+      :data-user-share-obj="detailsUserUpdate"
+    ></dialog-update-share>
     <dialog-share
       :show-modal="showModalShare"
       :un-show-modal="unShowModalShare"
@@ -18,6 +32,7 @@
       :data-user-obj="detailsItemUser"
       :data-user-share-obj="detailsUserShare"
     ></dialog-share>
+    <loading-sign-in v-show="showLoadingDelete"></loading-sign-in>
     <div
       v-for="(item, index) in listContent"
       :key="index"
@@ -25,19 +40,22 @@
       @mouseenter="videoPlay(index)"
       @mouseleave="videoPause(index)"
     >
-      <nuxt-link :to="`/profilePage/${item.user.id}`" class="h-[57px]"
+      <nuxt-link :to="`/profilePage/${item.share_user.id}`" class="h-[57px]"
         ><img
-          :src="item.user.avatar"
+          :src="item.share_user.avatar"
           alt=""
           class="w-[57px] h-[57px] object-cover rounded-full"
       /></nuxt-link>
       <div class="text-left w-[700px] ml-4">
-        <div class="flex items-center justify-between">
-          <nuxt-link :to="`/profilePage/${item.user.id}`" class="text-left">
+        <div class="flex items-start justify-between">
+          <nuxt-link
+            :to="`/profilePage/${item.share_user.id}`"
+            class="text-left"
+          >
             <a href="#" class="flex items-center mb-1 justify-between">
               <div class="flex items-center">
                 <h3 class="font-bold mr-[4px] text-[18px]">
-                  {{ item.user.username }}
+                  {{ item.share_user.username }}
                 </h3>
                 <svg
                   class="tiktok-shsbhf-StyledVerifyBadge e1aglo370 mr-[4px]"
@@ -55,31 +73,24 @@
                     fill="white"
                   ></path>
                 </svg>
-                <h4 class="mr-[4px] text-[13px]">{{ item.user.fullname }}</h4>
+                <h4 class="mr-[4px] text-[13px]">
+                  {{ item.share_user.fullname }}
+                </h4>
                 <!-- <span class="mr-[4px]">.</span> -->
                 <!-- <p class="text-[13px]">12/3/2022</p> -->
               </div>
             </a>
             <p class="mb-1 max-w-[542px] w-[100%]">
-              {{ item.description }}
+              {{ item.share_description }}
             </p>
-            <div class="flex flex-wrap">
-              <nuxt-link
-                v-for="(itemHashtag, indexHashtag) in item.hashtags"
-                :key="indexHashtag"
-                :to="`/hashtagPage/${itemHashtag.id}`"
-                class="font-bold text-[16px] items-center my-1 hover:underline mr-4"
-              >
-                #{{ itemHashtag.name }}
-              </nuxt-link>
-            </div>
           </nuxt-link>
+
           <button
             v-if="tokenUser && tokenUser !== ''"
-            v-show="dataUser.id !== item.user.id"
-            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 mb-12 button-follow"
+            v-show="dataUser.id !== item.share_user.id"
+            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 mb-11 button-follow"
             :style="
-              !isFollow(index)
+              !isFollowShare(index)
                 ? { color: '#2563eb', border: '1px solid #2563eb' }
                 : {
                     color: '#000',
@@ -87,37 +98,98 @@
                     padding: '2px 14px',
                   }
             "
-            @click="followUser(item.user.id)"
+            @click="followUser(item.share_user.id)"
           >
-            {{ !isFollow(index) ? 'Follow' : 'Đang Follow' }}
+            {{ !isFollowShare(index) ? 'Follow' : 'Đang Follow' }}
           </button>
           <button
             v-else
-            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 mb-12"
+            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 mb-12 button-follow"
             @click="showAlertDialog"
           >
             Follow
           </button>
         </div>
         <div class="flex items-end">
-          <nuxt-link :to="`/detailsVideoPage/${item.id}`" class="w-[70%] py-3">
-            <div
-              class="h-[500px] w-full relative z-10 bg-black overflow-hidden rounded-xl"
+          <div class="border rounded-xl w-[75%]">
+            <nuxt-link
+              :to="`/detailsVideoPage/${item.share_video_id}`"
+              class="w-[75%] py-3"
             >
               <div
-                class="back-blur"
-                :style="`background-image: url('${item.cover}')`"
-              ></div>
-              <video
-                ref="videoRef"
-                class="block w-full h-full object-contain rounded-md videoplay relative z-10"
-                controls
-                :src="item.url"
-                :poster="item.background_video"
-                muted
-              ></video>
+                class="h-[450px] w-full relative z-10 bg-black overflow-hidden"
+                style="border-radius: 12px 12px 0 0"
+              >
+                <div
+                  class="back-blur"
+                  :style="`background-image: url('${item.cover}')`"
+                ></div>
+                <video
+                  ref="videoRef"
+                  class="block w-full h-full object-contain rounded-md videoplay relative z-10"
+                  controls
+                  :src="item.url"
+                  :poster="item.background_video"
+                  muted
+                ></video>
+              </div>
+            </nuxt-link>
+
+            <div class="py-5 px-4">
+              <div class="flex items-center justify-between">
+                <div class="flex">
+                  <img
+                    :src="item.user.avatar"
+                    alt=""
+                    class="w-[50px] h-[50px] rounded-full object-cover"
+                  />
+                  <div class="text-left ml-3">
+                    <h2 class="font-bold text-lg">
+                      {{ item.user.username }}
+                    </h2>
+                    <div class="flex">
+                      <p>{{ item.user.fullname }}</p>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  v-if="tokenUser && tokenUser !== ''"
+                  v-show="dataUser.id !== item.user.id"
+                  class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 button-follow"
+                  :style="
+                    !isFollow(index)
+                      ? { color: '#2563eb', border: '1px solid #2563eb' }
+                      : {
+                          color: '#000',
+                          border: '1px solid #ccc',
+                          padding: '2px 14px',
+                        }
+                  "
+                  @click="followUser(item.user.id)"
+                >
+                  {{ !isFollow(index) ? 'Follow' : 'Đang Follow' }}
+                </button>
+                <button
+                  v-else
+                  class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300"
+                  @click="showAlertDialog"
+                >
+                  Follow
+                </button>
+              </div>
+              <p class="mt-3 mb-1">{{ item.description }}</p>
+              <div class="flex flex-wrap">
+                <nuxt-link
+                  v-for="(itemHashtag, indexHashtag) in item.hashtags"
+                  :key="indexHashtag"
+                  :to="`/hashtagPage/${itemHashtag.id}`"
+                  class="font-bold text-[14px] items-center my-1 hover:underline mr-4"
+                >
+                  #{{ itemHashtag.name }}
+                </nuxt-link>
+              </div>
             </div>
-          </nuxt-link>
+          </div>
           <div class="ml-5 text-center">
             <div class="pb-2">
               <button
@@ -138,42 +210,42 @@
               </p>
             </div>
 
-            <div class="pb-2">
-              <nuxt-link
-                :to="`/detailsVideoPage/${item.id}`"
+            <div
+              v-if="dataUser && dataUser.id === item.share_user_id"
+              class="pb-2"
+            >
+              <button
                 class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] button-heart"
+                @click="getDataUpdate(item.id)"
               >
-                <img
-                  src="./assets/img/icon-comment.png"
-                  alt=""
-                  class="w-[21px]"
-              /></nuxt-link>
-              <p class="text-[12px] font-semibold text-[#000] my-1">
-                {{ item.comments.length }}
-              </p>
+                <span class="mdi mdi-content-save-edit text-[21px]"></span>
+              </button>
+              <p class="text-[12px] font-semibold text-[#000] my-1">Sửa bài</p>
             </div>
 
             <div class="pb-2">
-              <a
-                href="#"
-                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee]"
-              >
-                <span class="mdi mdi-eye text-black text-[21px]"></span
-              ></a>
-              <p class="text-[12px] font-semibold text-[#000] my-1">
-                {{ item.views }}
-              </p>
-            </div>
-            <div class="pb-2">
               <button
                 class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] button-heart"
-                @click="getDataShare(item.id)"
+                @click="getDataShare(item.share_video_id)"
               >
                 <span class="mdi mdi-share text-black text-[21px]"></span>
               </button>
               <p class="text-[12px] font-semibold text-[#000] my-1 text-center">
                 Chia sẻ
               </p>
+            </div>
+
+            <div
+              v-if="dataUser && dataUser.id === item.share_user_id"
+              class="pb-2"
+            >
+              <button
+                class="w-[48px] h-[48px] rounded-full flex justify-center items-center bg-[#eee] button-heart"
+                @click="handleRow(item)"
+              >
+                <span class="mdi mdi-delete text-black text-[21px]"></span>
+              </button>
+              <p class="text-[12px] font-semibold text-[#000] my-1">Xóa bài</p>
             </div>
           </div>
         </div>
@@ -184,14 +256,17 @@
 
 <script>
 // import axios from 'axios'
+import DialogShare from '../content/dialogShare.vue'
+
 import loadingBox from '../loading/loadingBox.vue'
-import DialogShare from './dialogShare.vue'
+import LoadingSignIn from '../loading/loadingSignIn.vue'
+import DialogUpdateShare from './dialogUpdateShare.vue'
 
 import AuthService from '@/services/authService.js'
 
 export default {
-  name: 'ContentContainer',
-  components: { loadingBox, DialogShare },
+  name: 'ShareContainer',
+  components: { loadingBox, LoadingSignIn, DialogUpdateShare, DialogShare },
 
   data() {
     return {
@@ -204,6 +279,13 @@ export default {
       dataUser: {},
       tokenUser: null,
       showLoading: false,
+      showDialog: false,
+      idDelete: null,
+      showLoadingDelete: false,
+      showModalUpdate: false,
+      detailsUserUpdate: {},
+      detailsItemUserUpdate: {},
+      detailsVideoUpdate: {},
       showModalShare: false,
       detailsVideoShare: {},
       detailsItemUser: {},
@@ -221,20 +303,16 @@ export default {
   async mounted() {
     this.showLoading = true
     this.tokenUser = localStorage.getItem('token')
-    this.$store.dispatch('actionsetIsUser', this.tokenUser)
+    this.dataUser = JSON.parse(localStorage.getItem('user'))
+
     if (this.tokenUser && this.tokenUser !== '') {
-      this.dataUser = JSON.parse(localStorage.getItem('user'))
-      await this.loadVideoNotFollow()
-      this.showLoading = false
-    } else {
-      await this.loadVideo()
-      this.showLoading = false
+      this.$store.dispatch('actionsetIsUser', this.tokenUser)
     }
+    await this.loadVideo()
+    this.showLoading = false
+    // }
   },
   methods: {
-    unShowModalShare() {
-      this.showModalShare = false
-    },
     async getDataShare(id) {
       if (this.tokenUser) {
         const res = await AuthService.loadVideoById(id)
@@ -244,6 +322,8 @@ export default {
           this.detailsUserShare = this.dataUser
           this.$store.dispatch('actionsetListUserLiked', res.video.likes)
           this.showModalShare = true
+
+          window.console.log('thành công')
         } else {
           window.console.log('ko thành công')
         }
@@ -254,6 +334,51 @@ export default {
           title: 'Warning',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
+      }
+    },
+    async getDataUpdate(id) {
+      const res = await AuthService.loadVideoById(id)
+      if (res && res.status === 'success') {
+        this.detailsVideoUpdate = res.video
+        this.detailsItemUserUpdate = res.video.user
+        this.detailsUserUpdate = res.video.share_user
+        this.$store.dispatch('actionsetListUserLiked', res.video.likes)
+        this.showModalUpdate = true
+
+        window.console.log('thành công')
+      } else {
+        window.console.log('ko thành công')
+      }
+    },
+    unShowModalShare() {
+      this.showModalShare = false
+    },
+    unShowModalUpdate() {
+      this.showModalUpdate = false
+    },
+    unShowDialog() {
+      this.showDialog = false
+    },
+    handleRow(item) {
+      this.showDialog = true
+      this.idDelete = item.id
+    },
+    async deleteVideoShare() {
+      this.showLoadingDelete = true
+      const res = await AuthService.deleteVideo(this.idDelete)
+      if (res && res.status === 'success') {
+        this.showLoadingDelete = false
+        this.$notify({
+          type: 'success',
+          group: 'default',
+          title: 'Success',
+          text: 'Xóa bài viết thành công!!!',
+        })
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+      } else {
+        window.console.log('ko thành công')
       }
     },
     checkLikedVideo(index) {
@@ -276,7 +401,7 @@ export default {
           video_id: id,
         })
         if (res && res.status === 'success') {
-          this.loadVideoNotFollow()
+          this.loadVideo()
           if (res.message === 'Create like successfully') {
             this.$notify({
               type: 'success',
@@ -315,18 +440,10 @@ export default {
     async loadVideo() {
       const res = await AuthService.video()
       if (res && res.status === 'success') {
-        this.listContent = res.videos.filter((el) => el.type === 'PUBLIC')
-        this.listContent.sort(() => Math.random() - 0.5)
+        this.listContent = res.videos.filter((el) => el.type === 'SHARE')
+        // this.listContent.sort(() => Math.random() - 0.5)
         this.$store.dispatch('actionSetListVideos', this.listContent)
-      } else {
-        window.console.log('ko thành công')
-      }
-    },
-    async loadVideoNotFollow() {
-      const res = await AuthService.videoNotFollow()
-      if (res && res.status === 'success') {
-        this.listContent = res.video.filter((el) => el.type === 'PUBLIC')
-        this.$store.dispatch('actionSetListVideos', this.listContent)
+        window.console.log('thành công')
       } else {
         window.console.log('ko thành công')
       }
@@ -342,6 +459,7 @@ export default {
               'actionsetListUserFollowings',
               res.user.followings
             )
+            window.console.log('thành công')
           } else {
             window.console.log('ko thành công')
           }
@@ -380,6 +498,12 @@ export default {
         title: 'Warning',
         text: 'Vui lòng đăng nhập để thực hiện chức năng này',
       })
+    },
+    isFollowShare(index) {
+      const isFollowing = !!this.getListFollowings.find(
+        (ele) => ele.user_id_2 === this.listContent[index].share_user_id
+      )
+      return isFollowing
     },
     isFollow(index) {
       const isFollowing = !!this.getListFollowings.find(

@@ -148,22 +148,27 @@ export default {
       if (this.newPass === this.confirmNewPass) {
         this.showLoading = true
 
-        const res = await AuthService.changePassword({
-          old_password: this.oldPass,
-          new_password: this.newPass,
-        })
-
-        // this.$store.dispatch('actionsetDataUser', data)
-        if (res && res.status === 'success') {
-          this.showLoading = false
-          this.$notify({
-            type: 'success',
-            group: 'default',
-            title: 'Success',
-            text: 'Đổi mật khẩu thành công!!',
+        try {
+          const res = await AuthService.changePassword({
+            old_password: this.oldPass,
+            new_password: this.newPass,
           })
-          setTimeout(() => window.location.reload(), 800)
-        } else {
+
+          // this.$store.dispatch('actionsetDataUser', data)
+          if (res && res.status === 'success') {
+            this.showLoading = false
+            this.$notify({
+              type: 'success',
+              group: 'default',
+              title: 'Success',
+              text: 'Đổi mật khẩu thành công!!',
+            })
+            setTimeout(() => window.location.reload(), 800)
+          } else {
+            window.console.log('không thành công')
+          }
+        } catch (err) {
+          this.showLoading = false
           this.$notify({
             type: 'warn',
             group: 'default',
