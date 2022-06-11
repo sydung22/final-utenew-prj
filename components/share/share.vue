@@ -80,9 +80,13 @@
                 <!-- <p class="text-[13px]">12/3/2022</p> -->
               </div>
             </a>
-            <p class="mb-1 max-w-[542px] w-[100%]">
+            <p
+              class="mb-1 max-w-[542px] w-[100%]"
+              v-if="item.share_description"
+            >
               {{ item.share_description }}
             </p>
+            <p class="mb-1 max-w-[542px] w-[100%]" v-else>Không có nội dung</p>
           </nuxt-link>
 
           <button
@@ -177,7 +181,11 @@
                   Follow
                 </button>
               </div>
-              <p class="mt-3 mb-1">{{ item.description }}</p>
+              <p class="mt-3 mb-1" v-if="item.description">
+                {{ item.description }}
+              </p>
+              <p class="mt-3 mb-1" v-else>Không có nội dung</p>
+
               <div class="flex flex-wrap">
                 <nuxt-link
                   v-for="(itemHashtag, indexHashtag) in item.hashtags"
