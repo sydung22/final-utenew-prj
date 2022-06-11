@@ -361,7 +361,7 @@ export default {
             this.$notify({
               type: 'success',
               group: 'default',
-              title: 'Success',
+              title: 'Thông báo',
               text: 'Tải bài đăng thành công',
             })
             setTimeout(() => {
@@ -382,7 +382,7 @@ export default {
           this.$notify({
             type: 'warn',
             group: 'default',
-            title: 'Warning',
+            title: 'Thông báo',
             text: 'Vui lòng điền đầy đủ nội dung video',
           })
         }
@@ -390,7 +390,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Dữ liệu video chưa được tải lên',
         })
       }

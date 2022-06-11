@@ -251,7 +251,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }
@@ -281,7 +281,7 @@ export default {
             this.$notify({
               type: 'success',
               group: 'default',
-              title: 'Success',
+              title: 'Thông báo',
               text: 'Bạn vừa thích bài viết này',
             })
             setTimeout(() => {
@@ -296,7 +296,7 @@ export default {
             this.$notify({
               type: 'success',
               group: 'default',
-              title: 'Success',
+              title: 'Thông báo',
               text: 'Bạn vừa hủy thích bài viết này',
             })
           }
@@ -307,7 +307,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }
@@ -350,7 +350,7 @@ export default {
           this.$notify({
             type: 'success',
             group: 'default',
-            title: 'Success',
+            title: 'Thông báo',
             text: 'Bạn vừa theo dõi người dùng này',
           })
           setTimeout(() => {
@@ -365,7 +365,7 @@ export default {
           this.$notify({
             type: 'success',
             group: 'default',
-            title: 'Success',
+            title: 'Thông báo',
             text: 'Bạn vừa hủy theo dõi người dùng này',
           })
         }
@@ -377,7 +377,7 @@ export default {
       this.$notify({
         type: 'warn',
         group: 'default',
-        title: 'Warning',
+        title: 'Thông báo',
         text: 'Vui lòng đăng nhập để thực hiện chức năng này',
       })
     },

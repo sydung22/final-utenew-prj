@@ -277,20 +277,30 @@ export default {
     },
     async updateProfile() {
       this.showLoading = true
-      const res = await AuthService.updateProfile(this.item)
-      if (res && res.status === 'success') {
+      try {
+        const res = await AuthService.updateProfile(this.item)
+        if (res && res.status === 'success') {
+          this.showLoading = false
+          this.$notify({
+            type: 'success',
+            group: 'default',
+            title: 'Thông báo',
+            text: 'Cập nhật thông tin thành công !',
+          })
+          localStorage.setItem('user', JSON.stringify(res.user))
+          window.console.log(res.user)
+          setTimeout(() => window.location.reload(), 800)
+        } else {
+          window.console.log('đổi thông tin không thành công')
+        }
+      } catch (err) {
         this.showLoading = false
         this.$notify({
-          type: 'success',
+          type: 'error',
           group: 'default',
-          title: 'Success',
-          text: 'Cập nhật thông tin thành công !',
+          title: 'Thông báo',
+          text: 'Cập nhật thông tin không thành công !',
         })
-        localStorage.setItem('user', JSON.stringify(res.user))
-        window.console.log(res.user)
-        setTimeout(() => window.location.reload(), 800)
-      } else {
-        window.console.log('đổi thông tin ko thành công')
       }
     },
   },

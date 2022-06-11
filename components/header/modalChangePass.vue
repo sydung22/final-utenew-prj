@@ -160,7 +160,7 @@ export default {
             this.$notify({
               type: 'success',
               group: 'default',
-              title: 'Success',
+              title: 'Thông báo',
               text: 'Đổi mật khẩu thành công!!',
             })
             setTimeout(() => window.location.reload(), 800)
@@ -172,7 +172,7 @@ export default {
           this.$notify({
             type: 'warn',
             group: 'default',
-            title: 'Warning',
+            title: 'Thông báo',
             text: 'Đổi mật khẩu không thành công',
           })
         }
@@ -180,7 +180,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Mật khẩu xác thực không trùng khớp',
         })
       }

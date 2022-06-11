@@ -172,7 +172,7 @@ export default {
             this.$notify({
               type: 'success',
               group: 'default',
-              title: 'Success',
+              title: 'Thông báo',
               text: 'Đăng ký thành công! Hãy đăng nhập lại',
             })
             setTimeout(() => this.$router.push('/LoginPage'), 1000)
@@ -185,7 +185,7 @@ export default {
           this.$notify({
             type: 'error',
             group: 'default',
-            title: 'Error',
+            title: 'Thông báo',
             text: 'Đăng ký không thành công! Vui lòng thử lại',
           })
         }
@@ -193,7 +193,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Mật khẩu xác thực không trùng khớp',
         })
       }

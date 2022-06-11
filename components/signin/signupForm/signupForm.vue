@@ -209,7 +209,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Mật khẩu xác thực không trùng khớp',
         })
       }

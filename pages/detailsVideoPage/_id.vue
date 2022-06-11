@@ -189,7 +189,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }
@@ -206,23 +206,23 @@ export default {
       this.showLoading = true
       const res = await AuthService.deleteVideo(Number(this.$route.params.id))
       if (res && res.status === 'success') {
-        await this.loadVideo()
-        const data = this.listCheckContent.filter(
-          (el) => el.share_video_id === Number(this.$route.params.id)
-        )
-        data.forEach((el) => {
-          AuthService.deleteVideo(el.id)
-          if (res && res.status === 'success') {
-            window.console.log('xóa video chia sẻ thành công')
-          } else {
-            window.console.log('xóa video không chia sẻ thành công')
-          }
-        })
+        // await this.loadVideo()
+        // const data = this.listCheckContent.filter(
+        //   (el) => el.share_video_id === Number(this.$route.params.id)
+        // )
+        // data.forEach((el) => {
+        //   AuthService.deleteVideo(el.id)
+        //   if (res && res.status === 'success') {
+        //     window.console.log('xóa video chia sẻ thành công')
+        //   } else {
+        //     window.console.log('xóa video không chia sẻ thành công')
+        //   }
+        // })
         this.showLoading = false
         this.$notify({
           type: 'success',
           group: 'default',
-          title: 'Success',
+          title: 'Thông báo',
           text: 'Xóa bài đăng thành công!!!',
         })
         setTimeout(() => {
@@ -244,7 +244,7 @@ export default {
         this.$notify({
           type: 'success',
           group: 'default',
-          title: 'Success',
+          title: 'Thông báo',
           text: 'Xóa bình luận thành công!!!',
         })
       } else {
@@ -265,7 +265,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }
@@ -284,7 +284,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }
@@ -327,7 +327,7 @@ export default {
           this.$notify({
             type: 'warn',
             group: 'default',
-            title: 'Warning',
+            title: 'Thông báo',
             text: 'Bạn chưa đủ điều kiện để tải video này',
           })
         }
@@ -335,7 +335,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }
@@ -347,7 +347,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }
@@ -411,7 +411,7 @@ export default {
             this.$notify({
               type: 'success',
               group: 'default',
-              title: 'Success',
+              title: 'Thông báo',
               text: 'Bạn vừa theo dõi người dùng này',
             })
             setTimeout(() => {
@@ -426,7 +426,7 @@ export default {
             this.$notify({
               type: 'success',
               group: 'default',
-              title: 'Success',
+              title: 'Thông báo',
               text: 'Bạn vừa hủy theo dõi người dùng này',
             })
           }
@@ -437,7 +437,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }

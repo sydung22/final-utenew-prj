@@ -181,7 +181,7 @@ export default {
       this.$notify({
         type: 'warn',
         group: 'default',
-        title: 'Warning',
+        title: 'Thông báo',
         text: 'Vui lòng đăng nhập để thực hiện chức năng này',
       })
     },

@@ -174,7 +174,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng không bỏ trống',
         })
       } else {
@@ -192,7 +192,7 @@ export default {
             this.$notify({
               type: 'success',
               group: 'default',
-              title: 'Success',
+              title: 'Thông báo',
               text: 'Đăng nhập thành công! Đang vào trang chủ',
             })
             const tokenUser = localStorage.getItem('token')
@@ -207,7 +207,7 @@ export default {
           this.$notify({
             type: 'error',
             group: 'default',
-            title: 'Error',
+            title: 'Thông báo',
             text: 'Đăng nhập thất bại! Vui lòng thử lại',
           })
         }

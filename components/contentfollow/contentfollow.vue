@@ -213,7 +213,7 @@ export default {
       this.$notify({
         type: 'warn',
         group: 'default',
-        title: 'Warning',
+        title: 'Thông báo',
         text: 'Vui lòng đăng nhập để vào trang này',
       })
       setTimeout(() => this.$router.push('/'), 1000)
@@ -243,7 +243,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }
@@ -273,7 +273,7 @@ export default {
         this.$notify({
           type: 'warn',
           group: 'default',
-          title: 'Warning',
+          title: 'Thông báo',
           text: 'Vui lòng đăng nhập để thực hiện chức năng này',
         })
       }

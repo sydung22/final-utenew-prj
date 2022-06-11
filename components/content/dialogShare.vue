@@ -284,7 +284,7 @@ export default {
         this.$notify({
           type: 'success',
           group: 'default',
-          title: 'Success',
+          title: 'Thông báo',
           text: 'Chia sẻ bài viết thành công!',
         })
         if (this.$route.fullPath === '/SharePage') {

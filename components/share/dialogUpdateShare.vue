@@ -286,7 +286,7 @@ export default {
         this.$notify({
           type: 'success',
           group: 'default',
-          title: 'Success',
+          title: 'Thông báo',
           text: 'Chỉnh sửa bài viết thành công!',
         })
         setTimeout(() => {
