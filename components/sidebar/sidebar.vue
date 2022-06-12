@@ -130,9 +130,20 @@
           <p class="font-thin text-[14px] italic">{{ item.user_2.fullname }}</p>
         </div>
       </nuxt-link>
-      <a href="#" class="italic font-bold mt-2 text-[#2563eb] inline-block"
-        >Xem Thêm</a
+      <button
+        v-if="lengthFollow < 10"
+        class="italic font-bold text-[#2563eb] inline-block mt-2"
+        @click="loadMoreFollow"
       >
+        Xem Tất Cả
+      </button>
+      <button
+        v-else
+        class="italic font-bold text-[#2563eb] inline-block mt-2"
+        @click="loadMoreFollow"
+      >
+        Ẩn bớt
+      </button>
     </div>
     <div class="text-left py-4 border-b">
       <p class="text-[14px] text-[#413119] font-bold italic mb-2">Khám phá</p>
@@ -145,7 +156,7 @@
       </loading-box>
       <div class="flex flex-wrap">
         <div
-          v-for="(item, index) in listHashtag"
+          v-for="(item, index) in getListHashtag"
           :key="index"
           class="py-[3px] mr-2 hagstag-item"
         >
@@ -158,6 +169,20 @@
           </nuxt-link>
         </div>
       </div>
+      <button
+        v-if="lengthHashtag < 14"
+        class="italic font-bold text-[#2563eb] block mt-2"
+        @click="loadMoreHashtag"
+      >
+        Xem Tất Cả
+      </button>
+      <button
+        v-else
+        class="italic font-bold text-[#2563eb] block mt-2"
+        @click="loadMoreHashtag"
+      >
+        Ẩn bớt
+      </button>
     </div>
     <div class="text-left py-4 footer-sidebar">
       <ul class="flex text-[12px] mb-3">
@@ -204,6 +229,8 @@ export default {
       listDataFollowings: [],
       listHashtag: [],
       length: 7,
+      lengthHashtag: 7,
+      lengthFollow: 5,
       showLoadingListUser: false,
       showLoadingListFollow: false,
       showLoadingListHashtag: false,
@@ -212,10 +239,13 @@ export default {
   },
   computed: {
     getListFollowings() {
-      return this.$store.state.listUserFollowings
+      return this.$store.state.listUserFollowings.slice(0, this.lengthFollow)
     },
     loadListUserOffers() {
       return this.listUserOffers.slice(0, this.length)
+    },
+    getListHashtag() {
+      return this.listHashtag.slice(0, this.lengthHashtag)
     },
   },
   async mounted() {
@@ -268,6 +298,20 @@ export default {
         this.length = this.length + 7
       } else {
         this.length = this.length - 7
+      }
+    },
+    loadMoreFollow() {
+      if (this.lengthFollow < 10) {
+        this.lengthFollow = this.lengthFollow + 5
+      } else {
+        this.lengthFollow = this.lengthFollow - 5
+      }
+    },
+    loadMoreHashtag() {
+      if (this.lengthHashtag < 14) {
+        this.lengthHashtag = this.lengthHashtag + 7
+      } else {
+        this.lengthHashtag = this.lengthHashtag - 7
       }
     },
   },

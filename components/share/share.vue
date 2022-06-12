@@ -181,10 +181,15 @@
                   Follow
                 </button>
               </div>
-              <p class="mt-3 mb-1" v-if="item.description">
+              <p
+                class="mt-3 mb-1 max-w-[542px] w-[100%]"
+                v-if="item.description"
+              >
                 {{ item.description }}
               </p>
-              <p class="mt-3 mb-1" v-else>Không có nội dung</p>
+              <p class="mt-3 mb-1 max-w-[542px] w-[100%]" v-else>
+                Không có nội dung
+              </p>
 
               <div class="flex flex-wrap">
                 <nuxt-link

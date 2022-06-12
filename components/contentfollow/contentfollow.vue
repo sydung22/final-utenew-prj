@@ -58,7 +58,7 @@
                 <!-- <p class="text-[13px]">12/3/2022</p> -->
               </div>
             </a>
-            <p class="mb-1 max-w-[542px] w-[70%]">
+            <p class="mb-1 max-w-[542px] w-[100%]">
               {{ item.description }}
             </p>
             <div class="flex flex-wrap">
