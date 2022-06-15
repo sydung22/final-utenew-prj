@@ -105,7 +105,7 @@
                 class="block w-full h-full object-contain rounded-md videoplay relative z-10"
                 controls
                 :src="item.url"
-                :poster="item.background_video"
+                :poster="item.cover"
                 muted
               ></video>
             </div>

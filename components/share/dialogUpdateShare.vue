@@ -151,7 +151,7 @@
                     class="block w-full h-full object-contain rounded-md videoplay relative z-10"
                     controls
                     :src="itemShare.url"
-                    :poster="itemShare.background_video"
+                    :poster="itemShare.cover"
                     muted
                   ></video>
                 </div>

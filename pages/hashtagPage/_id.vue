@@ -50,7 +50,7 @@
           </svg>
         </div>
       </div>
-      <div class="grid grid-cols-4 mt-7">
+      <div class="grid grid-cols-4 gap-3 mt-7">
         <nuxt-link
           v-for="(item, index) in detailsHashtags"
           :key="index"

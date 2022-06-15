@@ -267,6 +267,7 @@
           <div class="mt-5 flex">
             <button
               class="border px-7 py-2 text-base font-bold rounded w-[164px]"
+              @click="outPage"
             >
               Hủy Bỏ
             </button>
@@ -333,6 +334,9 @@ export default {
     this.$store.dispatch('actionsetIsUser', tokenUser)
   },
   methods: {
+    outPage() {
+      this.$router.push('/')
+    },
     insert(emoji) {
       this.description += emoji
     },

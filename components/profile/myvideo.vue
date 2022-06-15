@@ -8,7 +8,7 @@
     >
       <video
         ref="videoRef"
-        :poster="item.background_video"
+        :poster="item.cover"
         class="block w-full h-full object-cover rounded-md videoplay"
         :src="item.url"
         muted

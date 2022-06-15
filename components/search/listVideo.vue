@@ -12,7 +12,7 @@
         >
           <video
             ref="videoRef"
-            :poster="item.background_video"
+            :poster="item.cover"
             class="block w-full h-[350px] object-cover rounded-md videoplay"
             :src="item.url"
             muted

@@ -61,7 +61,7 @@ export default {
       return this.$store.state.searchTitle
     },
     getListAccount() {
-      return this.$store.state.listAccount
+      return this.$store.state.listAccount.slice(0, 5)
     },
     boxSearch() {
       return this.showDialogSearch
