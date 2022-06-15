@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[rgb(240, 240, 240)] py-9">
+  <div class="bg-[rgb(240, 240, 240)] py-9" @keyup.enter="uploadVideo">
     <loading-video v-show="showLoadingBox"></loading-video>
     <div
       class="bg-white w-3/5 mx-auto py-6 px-14 rounded upload-container"

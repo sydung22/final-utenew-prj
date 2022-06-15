@@ -451,9 +451,9 @@ export default {
       }
     },
     async loadVideo() {
-      const res = await AuthService.video()
+      const res = await AuthService.getVideoShareByShare()
       if (res && res.status === 'success') {
-        this.listContent = res.videos.filter((el) => el.type === 'SHARE')
+        this.listContent = res.videos
         // this.listContent.sort(() => Math.random() - 0.5)
         this.$store.dispatch('actionSetListVideos', this.listContent)
         window.console.log('thành công')

@@ -150,6 +150,22 @@ const AuthService = {
       window.console.log('ko thành công')
     }
   },
+  async getVideoShareByShare() {
+    try {
+      this.initAuthHeader()
+      const res = await axios.get(
+        `http://127.0.0.1:8080/api/video/params?type=SHARE`
+      )
+      if (res.status === 200) {
+        return res.data
+      } else {
+        window.console.log('ko thành công')
+      }
+      return res.data
+    } catch (e) {
+      window.console.log('ko thành công')
+    }
+  },
   async updateVideo(data, id) {
     try {
       this.initAuthHeader()

@@ -96,7 +96,10 @@
         </div>
       </div>
       <div class="text-left flex py-4">
-        <p class="mr-[35px] italic">
+        <p
+          class="mr-[35px] italic cursor-pointer"
+          @click="showFollowing = true"
+        >
           <span class="mr-1.5 font-bold text-[18px] not-italic">{{
             detailsUser.followings_count
           }}</span
@@ -192,6 +195,10 @@
         :user-name="detailsUser.username"
       ></component>
     </div>
+    <list-following
+      :show-following="showFollowing"
+      :un-show-following="unShowFollowing"
+    ></list-following>
   </div>
 </template>
 
@@ -205,10 +212,18 @@ import videoshare from '../../components/profile/videoshare.vue'
 import ModalEdit from '../../components/profile/modalEdit.vue'
 import AuthService from '@/services/authService.js'
 import LoadingBox from '~/components/loading/loadingBox.vue'
+import ListFollowing from '~/components/profile/listFollowing.vue'
 
 export default {
   name: 'ProfileContainer',
-  components: { myvideo, videolike, videoshare, ModalEdit, LoadingBox },
+  components: {
+    myvideo,
+    videolike,
+    videoshare,
+    ModalEdit,
+    LoadingBox,
+    ListFollowing,
+  },
   layout: 'publics',
 
   data() {
@@ -247,6 +262,7 @@ export default {
       showLoadingBox: false,
       countListLike: [],
       sumListLike: 0,
+      showFollowing: false,
     }
   },
   computed: {
@@ -274,6 +290,9 @@ export default {
   },
 
   methods: {
+    unShowFollowing() {
+      this.showFollowing = false
+    },
     loadCountLike() {
       this.listVideoUser.forEach((v) => {
         this.countListLike.push(v.likes.length)

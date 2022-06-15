@@ -1,5 +1,5 @@
 <template>
-  <div v-show="showModalSignIn">
+  <div v-show="showModalSignIn" @keyup.enter="login">
     <!-- <div
       class="bg-red-600 text-white font-bold mb-2 mx-[-25px] py-2 text-[18px]"
     >

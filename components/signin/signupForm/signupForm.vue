@@ -1,5 +1,5 @@
 <template>
-  <div v-show="showModalSignUp">
+  <div v-show="showModalSignUp" @keyup.enter="signUp">
     <div
       v-show="showAlertFail"
       class="bg-red-600 text-white font-bold mb-2 mx-[-25px] py-2 text-[18px]"

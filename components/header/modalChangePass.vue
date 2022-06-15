@@ -6,6 +6,7 @@
     aria-hidden="true"
     class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex items-center justify-center"
     style="background-color: rgba(0 0 0 / 70%)"
+    @keyup.enter="changePassword"
   >
     <div class="relative p-4 w-full max-w-[600px] h-full md:h-auto">
       <!-- Modal content -->

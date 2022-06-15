@@ -295,7 +295,7 @@
           @click="showUpReply = false"
         ></span>
       </div>
-      <div class="flex items-center">
+      <div class="flex items-center" @keyup.enter="saveComment">
         <div
           class="flex items-center bg-[#1618230f] w-[432px] py-[5px] px-4 rounded-md input-comment"
         >
