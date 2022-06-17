@@ -237,7 +237,7 @@
                 </select>
               </div>
               <div class="mt-2">
-                <div class="flex items-center">
+                <!-- <div class="flex items-center">
                   <label
                     class="form-check-label block text-gray-700 text-sm font-bold mr-2"
                     for="flexSwitchCheckDefault"
@@ -251,14 +251,15 @@
                       role="switch"
                     />
                   </div>
-                </div>
-                <div class="text-[13px] text-gray-500 mt-1 italic">
-                  Chúng tôi sẽ kiểm tra xem video của bạn có sử dụng âm thanh vi
-                  phạm bản quyền hay không. Nếu chúng tôi phát hiện có vi phạm,
-                  bạn có thể chỉnh sửa video trước khi đăng.<a
-                    href="#"
-                    class="text-[13px] font-bold text-black not-italic"
-                    >Tìm hiểu thêm</a
+                </div> -->
+                <div class="text-[13px] text-gray-500 mt-5 italic">
+                  Hãy cùng nhau tạo ra những video có nội dung hay và bổ ích tại
+                  đây nào ^^
+                  <a
+                    href="https://online-video-cutter.com/vi/"
+                    target="_blank"
+                    class="text-[13px] font-bold text-black not-italic underline block"
+                    >Phần mềm chỉnh sửa video</a
                   >
                 </div>
               </div>

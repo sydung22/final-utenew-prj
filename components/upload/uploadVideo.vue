@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[rgb(240, 240, 240)] py-9" @keyup.enter="uploadVideo">
+  <div class="bg-[rgb(240, 240, 240)] py-9">
     <loading-video v-show="showLoadingBox"></loading-video>
     <div
       class="bg-white w-3/5 mx-auto py-6 px-14 rounded upload-container"
@@ -239,28 +239,21 @@
             </select>
           </div>
           <div class="mt-2">
-            <div class="flex items-center">
+            <!-- <div class="flex items-center">
               <label
                 class="form-check-label block text-gray-700 text-sm font-bold mr-2"
                 for="flexSwitchCheckDefault"
-                >Chạy quy trình kiểm tra bản quyền</label
+                >Phần mềm chỉnh sửa video</label
               >
-              <div class="form-check form-switch">
-                <input
-                  id="flexSwitchCheckDefault"
-                  class="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm checked:bg-[#2563EB]"
-                  type="checkbox"
-                  role="switch"
-                />
-              </div>
-            </div>
-            <div class="text-[13px] text-gray-500 mt-1 italic">
-              Chúng tôi sẽ kiểm tra xem video của bạn có sử dụng âm thanh vi
-              phạm bản quyền hay không. Nếu chúng tôi phát hiện có vi phạm, bạn
-              có thể chỉnh sửa video trước khi đăng.<a
-                href="#"
-                class="text-[13px] font-bold text-black not-italic"
-                >Tìm hiểu thêm</a
+            </div> -->
+            <div class="text-[13px] text-gray-500 mt-5 italic">
+              Hãy cùng nhau tạo ra những video có nội dung hay và bổ ích tại đây
+              nào ^^
+              <a
+                href="https://online-video-cutter.com/vi/"
+                target="_blank"
+                class="text-[13px] font-bold text-black not-italic underline block"
+                >Phần mềm chỉnh sửa video</a
               >
             </div>
           </div>
