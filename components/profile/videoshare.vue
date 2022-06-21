@@ -45,7 +45,7 @@
           >
         </div>
         <p class="text-left line-clamp-1 mt-1.5">{{ item.description }}</p>
-        <div class="flex flex-wrap">
+        <div class="flex line-clamp-1">
           <nuxt-link
             v-for="(itemHashtag, indexHashtag) in item.hashtags"
             :key="indexHashtag"

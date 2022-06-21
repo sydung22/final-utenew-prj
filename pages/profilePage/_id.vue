@@ -42,11 +42,12 @@
               Follow
             </button>
             <div v-else class="flex items-center">
-              <nuxt-link
-                to="/ChatPage"
+              <button
+                @click="followUser(detailsUser.id)"
                 class="text-[#2563eb] border border-[#2563eb] py-[6px] px-[45px] font-bold rounded-md text-[18px] hover:bg-[#d6d6f0] duration-300"
-                >Đang theo dõi</nuxt-link
               >
+                Đang theo dõi
+              </button>
               <div
                 class="border ml-2 w-[40px] h-[40px] flex items-center justify-center rounded-md border-[#ccc] cursor-pointer hover:bg-gray-400"
                 @click="followUser(detailsUser.id)"
@@ -96,18 +97,15 @@
         </div>
       </div>
       <div class="text-left flex py-4">
-        <p
-          class="mr-[35px] italic cursor-pointer"
-          @click="showFollowing = true"
-        >
+        <p class="mr-[35px] italic cursor-pointer" @click="showPopupFollowings">
           <span class="mr-1.5 font-bold text-[18px] not-italic">{{
-            detailsUser.followings_count
+            getListFollwings.length
           }}</span
           >Đang Follow
         </p>
-        <p class="mr-[35px] italic">
+        <p class="mr-[35px] italic cursor-pointer" @click="showPopupFollowers">
           <span class="mr-1.5 font-bold text-[18px] not-italic">{{
-            detailsUser.followers_count
+            getListFollowers.length
           }}</span
           >Follower
         </p>
@@ -199,6 +197,11 @@
       :show-following="showFollowing"
       :un-show-following="unShowFollowing"
     ></list-following>
+    <list-follower
+      :show-follower="showFollower"
+      :un-show-follower="unShowFollower"
+    >
+    </list-follower>
   </div>
 </template>
 
@@ -213,6 +216,7 @@ import ModalEdit from '../../components/profile/modalEdit.vue'
 import AuthService from '@/services/authService.js'
 import LoadingBox from '~/components/loading/loadingBox.vue'
 import ListFollowing from '~/components/profile/listFollowing.vue'
+import ListFollower from '~/components/profile/listFollower.vue'
 
 export default {
   name: 'ProfileContainer',
@@ -223,6 +227,7 @@ export default {
     ModalEdit,
     LoadingBox,
     ListFollowing,
+    ListFollower,
   },
   layout: 'publics',
 
@@ -263,14 +268,21 @@ export default {
       countListLike: [],
       sumListLike: 0,
       showFollowing: false,
+      showFollower: false,
     }
   },
   computed: {
-    getListFollowings() {
+    getListUserFollowings() {
       return this.$store.state.listUserFollowings
     },
     getCountFollowers() {
       return this.$store.state.countFollowings
+    },
+    getListFollwings() {
+      return this.$store.state.listFollowings
+    },
+    getListFollowers() {
+      return this.$store.state.listFollowers
     },
   },
   async mounted() {
@@ -293,6 +305,9 @@ export default {
     unShowFollowing() {
       this.showFollowing = false
     },
+    unShowFollower() {
+      this.showFollower = false
+    },
     loadCountLike() {
       this.listVideoUser.forEach((v) => {
         this.countListLike.push(v.likes.length)
@@ -300,10 +315,42 @@ export default {
       window.console.log(this.countListLike)
       this.sumListLike = this.countListLike.reduce((a, b) => a + b, 0)
     },
+    showPopupFollowings() {
+      if (this.tokenUser && this.dataUser) {
+        this.showFollowing = true
+      } else {
+        this.$notify({
+          type: 'warn',
+          group: 'default',
+          title: 'Thông báo',
+          text: 'Bạn không có quyền xem danh sách này',
+        })
+      }
+    },
+    showPopupFollowers() {
+      if (this.tokenUser && this.dataUser) {
+        this.showFollower = true
+      } else {
+        this.$notify({
+          type: 'warn',
+          group: 'default',
+          title: 'Thông báo',
+          text: 'Bạn không có quyền xem danh sách này',
+        })
+      }
+    },
     async loadDetailUser() {
       const res = await AuthService.detailsUser(this.$route.params.id)
       if (res && res.status === 'success') {
         this.detailsUser = res.user
+        this.$store.dispatch(
+          'actionsetListFollowings',
+          this.detailsUser.followings
+        )
+        this.$store.dispatch(
+          'actionsetListFollowers',
+          this.detailsUser.followers
+        )
       } else {
         window.console.log('ko thành công')
       }
@@ -348,7 +395,7 @@ export default {
       this.showModalEdit = false
     },
     isFollow() {
-      const isFollowing = !!this.getListFollowings.find(
+      const isFollowing = !!this.getListUserFollowings.find(
         (ele) => ele.user_id_2 === Number(this.$route.params.id)
       )
       return isFollowing
@@ -364,6 +411,7 @@ export default {
               'actionsetListUserFollowings',
               res.user.followings
             )
+            this.loadDetailUser()
           } else {
             window.console.log('ko thành công')
           }

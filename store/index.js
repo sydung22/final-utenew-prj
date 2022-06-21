@@ -14,6 +14,8 @@ export const state = () => ({
   dataUser: null,
   listUserLiked: [],
   listUserLikedCmt: [],
+  listFollowings: [],
+  listFollowers: [],
 })
 
 export const mutations = {
@@ -62,6 +64,12 @@ export const mutations = {
   setListCountCmtLikes(state, listCountCmtLikes) {
     state.listCountCmtLikes = listCountCmtLikes
   },
+  setListFollowings(state, listFollowings) {
+    state.listFollowings = listFollowings
+  },
+  setListFollowers(state, listFollowers) {
+    state.listFollowers = listFollowers
+  },
 }
 export const actions = {
   actionSetTitleInfo({ commit }, title) {
@@ -102,6 +110,12 @@ export const actions = {
   },
   actionsetIsUser({ commit }, isUser) {
     commit('setIsUser', isUser)
+  },
+  actionsetListFollowings({ commit }, listFollowings) {
+    commit('setListFollowings', listFollowings)
+  },
+  actionsetListFollowers({ commit }, listFollowers) {
+    commit('setListFollowers', listFollowers)
   },
 }
 export const getters = {

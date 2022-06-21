@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="showFollowing"
+    v-show="showFollower"
     id="defaultModal"
     tabindex="-1"
     aria-hidden="true"
@@ -15,13 +15,13 @@
           class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600"
         >
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-            Danh sách đang theo dõi
+            Danh sách được theo dõi
           </h3>
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
             data-modal-toggle="defaultModal"
-            @click="unShowFollowing"
+            @click="unShowFollower"
           >
             <svg
               class="w-5 h-5"
@@ -40,22 +40,22 @@
         <!-- Modal body -->
 
         <div class="px-6 space-y-6 flex items-center pb-5">
-          <div v-if="getListFollwings.length">
+          <div v-if="getListFollowers.length">
             <nuxt-link
-              v-for="(item, index) in getListFollwings"
+              v-for="(item, index) in getListFollowers"
               :key="index"
               class="flex pl-4 py-2 border-b items-center w-[380px] cursor-pointer"
-              :to="`/profilePage/${item.user_2.id}`"
+              :to="`/profilePage/${item.user_1.id}`"
             >
               <img
-                :src="item.user_2.avatar"
+                :src="item.user_1.avatar"
                 alt=""
                 class="w-[60px] h-[60px] rounded-full object-cover"
               />
               <div class="text-left ml-4">
-                <h2 class="font-bold text-lg">{{ item.user_2.username }}</h2>
-                <p>{{ item.user_2.fullname }}</p>
-                <p class="line-clamp-1">✨{{ item.user_2.description }}</p>
+                <h2 class="font-bold text-lg">{{ item.user_1.username }}</h2>
+                <p>{{ item.user_1.fullname }}</p>
+                <p class="line-clamp-1">✨{{ item.user_1.description }}</p>
               </div>
             </nuxt-link>
           </div>
@@ -77,11 +77,11 @@ import loadingSignIn from '../loading/loadingSignIn.vue'
 export default {
   components: { loadingSignIn },
   props: {
-    showFollowing: {
+    showFollower: {
       type: Boolean,
       default: false,
     },
-    unShowFollowing: {
+    unShowFollower: {
       type: Function,
       default: () => 1,
     },
@@ -95,8 +95,8 @@ export default {
     }
   },
   computed: {
-    getListFollwings() {
-      return this.$store.state.listFollowings
+    getListFollowers() {
+      return this.$store.state.listFollowers
     },
   },
 }
