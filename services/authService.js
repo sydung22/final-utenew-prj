@@ -16,7 +16,7 @@ const AuthService = {
 
   async register(user) {
     const res = await axios.post(
-      'http://127.0.0.1:8080/api/auth/register',
+      'http://34.212.155.116:8080/api/auth/register',
       user
     )
     if (res.status === 200) {
@@ -31,7 +31,10 @@ const AuthService = {
     return res.data
   },
   async login(user) {
-    const res = await axios.post('http://127.0.0.1:8080/api/auth/login', user)
+    const res = await axios.post(
+      'http://34.212.155.116:8080/api/auth/login',
+      user
+    )
 
     if (res && res.status === 200) {
       localStorage.setItem('token', res.data.access_token)
@@ -45,7 +48,7 @@ const AuthService = {
   },
   async changePassword(data) {
     const res = await axios.post(
-      'http://127.0.0.1:8080/api/auth/change-pass',
+      'http://34.212.155.116:8080/api/auth/change-pass',
       data
     )
     if (res.status === 200) {
@@ -58,7 +61,7 @@ const AuthService = {
   },
   async updateProfile(data) {
     const res = await axios.post(
-      'http://127.0.0.1:8080/api/auth/update-profile',
+      'http://34.212.155.116:8080/api/auth/update-profile',
       data
     )
 
@@ -74,7 +77,10 @@ const AuthService = {
   async comment(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://127.0.0.1:8080/api/comment', data)
+      const res = await axios.post(
+        'http://34.212.155.116:8080/api/comment',
+        data
+      )
       if (res.status === 201) {
         return res.data
       } else {
@@ -88,7 +94,7 @@ const AuthService = {
   async reply(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://127.0.0.1:8080/api/reply', data)
+      const res = await axios.post('http://34.212.155.116:8080/api/reply', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -103,7 +109,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.post(
-        'http://127.0.0.1:8080/api/video/store-url',
+        'http://34.212.155.116:8080/api/video/store-url',
         data,
         config
       )
@@ -121,7 +127,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.post(
-        'http://127.0.0.1:8080/api/video/save-video',
+        'http://34.212.155.116:8080/api/video/save-video',
         data
       )
       if (res.status === 200) {
@@ -138,7 +144,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://127.0.0.1:8080/api/video/user/${id}/share`
+        `http://34.212.155.116:8080/api/video/user/${id}/share`
       )
       if (res.status === 200) {
         return res.data
@@ -154,7 +160,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://127.0.0.1:8080/api/video/params?type=SHARE`
+        `http://34.212.155.116:8080/api/video/params?type=SHARE`
       )
       if (res.status === 200) {
         return res.data
@@ -169,7 +175,10 @@ const AuthService = {
   async updateVideo(data, id) {
     try {
       this.initAuthHeader()
-      const res = await axios.put(`http://127.0.0.1:8080/api/video/${id}`, data)
+      const res = await axios.put(
+        `http://34.212.155.116:8080/api/video/${id}`,
+        data
+      )
       if (res.status === 201) {
         return res.data
       } else {
@@ -183,7 +192,9 @@ const AuthService = {
   async deleteVideo(id) {
     try {
       this.initAuthHeader()
-      const res = await axios.delete(`http://127.0.0.1:8080/api/video/${id}`)
+      const res = await axios.delete(
+        `http://34.212.155.116:8080/api/video/${id}`
+      )
       if (res.status === 200) {
         return res.data
       } else {
@@ -197,7 +208,9 @@ const AuthService = {
   async deleteComment(id) {
     try {
       this.initAuthHeader()
-      const res = await axios.delete(`http://127.0.0.1:8080/api/comment/${id}`)
+      const res = await axios.delete(
+        `http://34.212.155.116:8080/api/comment/${id}`
+      )
       if (res.status === 200) {
         return res.data
       } else {
@@ -211,7 +224,10 @@ const AuthService = {
   async createHashtag(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://127.0.0.1:8080/api/hashtag', data)
+      const res = await axios.post(
+        'http://34.212.155.116:8080/api/hashtag',
+        data
+      )
       if (res.status === 201) {
         return res.data
       } else {
@@ -225,7 +241,10 @@ const AuthService = {
   async deleteHashtag(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://127.0.0.1:8080/api/hashtag', data)
+      const res = await axios.post(
+        'http://34.212.155.116:8080/api/hashtag',
+        data
+      )
       if (res.status === 201) {
         return res.data
       } else {
@@ -239,7 +258,10 @@ const AuthService = {
   async sendReport(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://127.0.0.1:8080/api/report', data)
+      const res = await axios.post(
+        'http://34.212.155.116:8080/api/report',
+        data
+      )
       if (res.status === 201) {
         return res.data
       } else {
@@ -253,7 +275,10 @@ const AuthService = {
   async follow(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://127.0.0.1:8080/api/follow', data)
+      const res = await axios.post(
+        'http://34.212.155.116:8080/api/follow',
+        data
+      )
       if (res.status === 201) {
         return res.data
       } else {
@@ -267,7 +292,7 @@ const AuthService = {
   async like(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://127.0.0.1:8080/api/like', data)
+      const res = await axios.post('http://34.212.155.116:8080/api/like', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -282,7 +307,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.post(
-        'http://127.0.0.1:8080/api/user/minus-download'
+        'http://34.212.155.116:8080/api/user/minus-download'
       )
       if (res.status === 200) {
         return res.data
@@ -297,7 +322,7 @@ const AuthService = {
   async video() {
     try {
       this.initAuthHeader()
-      const res = await axios.get('http://127.0.0.1:8080/api/video')
+      const res = await axios.get('http://34.212.155.116:8080/api/video')
       if (res.status === 200) {
         return res.data
       } else {
@@ -312,7 +337,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.post(
-        `http://127.0.0.1:8080/api/video/${id}/share`,
+        `http://34.212.155.116:8080/api/video/${id}/share`,
         data
       )
       if (res.status === 200) {
@@ -329,7 +354,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        'http://127.0.0.1:8080/api/video/me?is_following=0'
+        'http://34.212.155.116:8080/api/video/me?is_following=0'
       )
       if (res.status === 200) {
         return res.data
@@ -345,7 +370,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        'http://127.0.0.1:8080/api/video/me?is_following=1'
+        'http://34.212.155.116:8080/api/video/me?is_following=1'
       )
       if (res.status === 200) {
         return res.data
@@ -359,7 +384,7 @@ const AuthService = {
   },
   async user() {
     try {
-      const res = await axios.get('http://127.0.0.1:8080/api/user')
+      const res = await axios.get('http://34.212.155.116:8080/api/user')
       if (res.status === 200) {
         return res.data
       } else {
@@ -373,7 +398,7 @@ const AuthService = {
   async hashtag() {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://127.0.0.1:8080/api/hashtag`)
+      const res = await axios.get(`http://34.212.155.116:8080/api/hashtag`)
 
       if (res.status === 200) {
         return res.data
@@ -388,7 +413,9 @@ const AuthService = {
   async getProfile() {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://127.0.0.1:8080/api/auth/user-profile`)
+      const res = await axios.get(
+        `http://34.212.155.116:8080/api/auth/user-profile`
+      )
 
       if (res.status === 200) {
         return res.data
@@ -408,7 +435,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://127.0.0.1:8080/api/search?keyword=${data}`
+        `http://34.212.155.116:8080/api/search?keyword=${data}`
       )
 
       if (res.status === 200) {
@@ -424,7 +451,7 @@ const AuthService = {
   async detailsUser(id) {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://127.0.0.1:8080/api/user/${id}`)
+      const res = await axios.get(`http://34.212.155.116:8080/api/user/${id}`)
 
       if (res.status === 200) {
         return res.data
@@ -439,7 +466,7 @@ const AuthService = {
   async loadVideoById(id) {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://127.0.0.1:8080/api/video/${id}`)
+      const res = await axios.get(`http://34.212.155.116:8080/api/video/${id}`)
 
       if (res.status === 200) {
         return res.data
@@ -455,7 +482,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://127.0.0.1:8080/api/video/params?user_id=${id}`
+        `http://34.212.155.116:8080/api/video/params?user_id=${id}`
       )
 
       if (res.status === 200) {
@@ -472,7 +499,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://127.0.0.1:8080/api/video/params?hashtag[0]=${data}`
+        `http://34.212.155.116:8080/api/video/params?hashtag[0]=${data}`
       )
 
       if (res.status === 200) {
@@ -488,7 +515,7 @@ const AuthService = {
   async loadVideoLiked() {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://127.0.0.1:8080/api/video/liked`)
+      const res = await axios.get(`http://34.212.155.116:8080/api/video/liked`)
 
       if (res.status === 200) {
         return res.data
@@ -500,12 +527,11 @@ const AuthService = {
       window.console.log('ko thành công')
     }
   },
-
   async loadCommentById(id) {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://127.0.0.1:8080/api/comment?video_id=${id}`
+        `http://34.212.155.116:8080/api/comment?video_id=${id}`
       )
 
       if (res.status === 200) {
@@ -523,7 +549,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://127.0.0.1:8080/api/reply?comment_id=${id}`
+        `http://34.212.155.116:8080/api/reply?comment_id=${id}`
       )
 
       if (res.status === 200) {
@@ -536,16 +562,7 @@ const AuthService = {
       window.console.log('ko thành công')
     }
   },
-
-  //   logout: async function () {
-  //     const res = await axios.post('logout')
-  //     if (res.data.code === 200) {
-  //       localStorage.setItem('sydungSportToken', '')
-  //       return res.data
-  //     } else {
-  //       console.log('data not ok')
-  //     }
-  //   },
+  //ĐƯỜNG DẪN LOCALHOST: // http://127.0.0.1:8080/
 }
 
 export default AuthService
