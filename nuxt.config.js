@@ -44,30 +44,6 @@ export default {
     '@nuxt/content',
     'nuxtjs-mdi-font',
     '@nuxtjs/cloudinary',
-    [
-      'nuxt-mail',
-      {
-        message: {
-          to: 'sydung2222000@gmail.com',
-        },
-        smtp: {
-          // host: 'smtp.example.com',
-          // port: 587,
-          // auth: {
-          //   user: 'username',
-          //   pass: 'password',
-          // },
-          type: 'SMTP',
-          host: 'smtp.gmail.com',
-          secure: true,
-          port: 465,
-          auth: {
-            user: 'sydung2222000@gmail.com',
-            pass: '01646996951nguyensydung',
-          },
-        },
-      },
-    ],
   ],
   cloudinary: {
     cloudName: 'dswt194ko',
