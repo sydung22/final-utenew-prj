@@ -6,6 +6,11 @@
         "use": "vercel-sapper",
         "config": {
           "serverFiles": ["package.json"]
+        },
+        "functions": {
+          "src/pages/**/*": {
+            "memory": 3008
+          }
         }
       }
     ],
@@ -18,10 +23,5 @@
           "Service-Worker-Allowed": "/"
         }
       }
-    ],
-    "functions": {
-      "src/pages/**/*": {
-        "memory": 3008
-      }
-    }
+    ]
 }
