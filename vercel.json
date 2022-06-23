@@ -5,12 +5,7 @@
         "src": "package.json", 
         "use": "vercel-sapper",
         "config": {
-          "serverFiles": ["package.json"]
-        },
-        "functions": {
-          "src/pages/**/*": {
-            "memory": 3008
-          }
+          "serverFiles": [".nuxt/content/**", "content/**"]
         }
       }
     ],
