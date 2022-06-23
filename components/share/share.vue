@@ -81,18 +81,18 @@
               </div>
             </a>
             <p
-              class="mb-1 max-w-[542px] w-[100%]"
+              class="mb-3 max-w-[542px] w-[100%]"
               v-if="item.share_description"
             >
               {{ item.share_description }}
             </p>
-            <p class="mb-1 max-w-[542px] w-[100%]" v-else>Không có nội dung</p>
+            <p class="mb-3 max-w-[542px] w-[100%]" v-else>Không có nội dung</p>
           </nuxt-link>
 
           <button
             v-if="tokenUser && tokenUser !== ''"
             v-show="dataUser.id !== item.share_user.id"
-            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 mb-11 button-follow"
+            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 button-follow"
             :style="
               !isFollowShare(index)
                 ? { color: '#2563eb', border: '1px solid #2563eb' }

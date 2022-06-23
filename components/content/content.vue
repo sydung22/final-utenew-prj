@@ -77,7 +77,7 @@
           <button
             v-if="tokenUser && tokenUser !== ''"
             v-show="dataUser.id !== item.user.id"
-            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 mb-12 button-follow"
+            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 button-follow"
             :style="
               !isFollow(index)
                 ? { color: '#2563eb', border: '1px solid #2563eb' }
@@ -93,7 +93,7 @@
           </button>
           <button
             v-else
-            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300 mb-12"
+            class="text-[#2563eb] border border-[#2563eb] py-[2px] px-[24px] font-semibold rounded-md text-[16px] hover:bg-[#d6d6f0] duration-300"
             @click="showAlertDialog"
           >
             Follow
@@ -114,7 +114,6 @@
                 controls
                 :src="item.url"
                 :poster="item.cover"
-                muted
               ></video>
             </div>
           </nuxt-link>

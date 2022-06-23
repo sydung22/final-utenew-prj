@@ -22,7 +22,6 @@
         :is-liked-comment="checkLikedCmt"
         :is-liked-reply="checkLikedReply"
         :change-followings="changeFollowings"
-        :url-video="detailsVideo.url"
         :change-heart="changeHeart"
         :on-like-comment="likeComment"
         :on-like-reply="likeReply"
@@ -300,12 +299,12 @@ export default {
         window.console.log('ko thành công')
       }
     },
-    async downloadItem(url) {
+    async downloadItem() {
       if (this.tokenUser) {
         const res = await AuthService.download()
         if (res && res.status === 'success') {
           axios
-            .get(url, { responseType: 'blob' })
+            .get(this.detailsVideo.url, { responseType: 'blob' })
             .then((response) => {
               const blob = new Blob([response.data], { type: 'video/mp4' })
               const link = document.createElement('a')

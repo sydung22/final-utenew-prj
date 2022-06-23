@@ -376,6 +376,7 @@ export default {
             window.console.log('upload k thành công')
           }
         } else {
+          this.showLoadingBox = false
           this.$notify({
             type: 'warn',
             group: 'default',

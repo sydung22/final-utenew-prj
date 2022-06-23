@@ -287,16 +287,17 @@ export default {
   },
   async mounted() {
     this.showLoadingBox = true
-    await this.loadDetailUser()
-    await this.loadVideoUser()
-    await this.loadFollowingVideos()
-    this.showLoadingBox = false
-    this.showDetailProfile = true
     const resUser = JSON.parse(localStorage.getItem('user'))
     this.tokenUser = localStorage.getItem('token')
     this.$store.dispatch('actionsetIsUser', this.tokenUser)
     this.dataUser = resUser
     this.dataUpdate = resUser
+    await this.loadDetailUser()
+    await this.loadVideoUser()
+    await this.loadFollowingVideos()
+    this.showLoadingBox = false
+    this.showDetailProfile = true
+
     this.isFollow()
     this.loadCountLike()
   },
@@ -358,7 +359,12 @@ export default {
     async loadVideoUser() {
       const res = await AuthService.loadVideoByUserId(this.$route.params.id)
       if (res && res.status === 'success') {
-        this.listVideoUser = res.videos.filter((el) => el.type !== 'SHARE')
+        // this.listVideoUser = res.videos.filter((el) => el.type !== 'SHARE')
+        if (this.tokenUser && this.detailsUser.id === this.dataUser.id) {
+          this.listVideoUser = res.videos.filter((el) => el.type !== 'SHARE')
+        } else {
+          this.listVideoUser = res.videos.filter((el) => el.type === 'PUBLIC')
+        }
       } else {
         window.console.log('ko thành công')
       }

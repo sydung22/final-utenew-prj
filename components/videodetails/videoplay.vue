@@ -15,7 +15,6 @@
           :poster="backgroundVideo"
           class="block w-full h-full object-contain"
           :src="urlVideo"
-          muted
           controlsList="nodownload"
         ></video>
       </div>
@@ -54,6 +53,7 @@
       </button>
       <div>
         <button
+          @click="backVideo"
           data-e2e="arrow-left"
           class="bg-[] w-[40px] h-[40px] flex items-center justify-center rounded-full rotate-[-90deg] hover:opacity-[0.7] duration-300"
           style="background: rgb(225 225 225 / 12%)"
@@ -73,6 +73,7 @@
           </svg>
         </button>
         <button
+          @click="nextVideo"
           data-e2e="arrow-right"
           class="bg-[] w-[40px] h-[40px] flex items-center justify-center rounded-full rotate-[90deg] mt-4 hover:opacity-[0.7] duration-300"
           style="background: rgb(225 225 225 / 12%)"
@@ -128,6 +129,16 @@ export default {
   methods: {
     goBack() {
       this.$router.go(-1)
+    },
+    backVideo() {
+      this.$router.push(
+        `/detailsVideoPage/${Number(this.$route.params.id) - 1}`
+      )
+    },
+    nextVideo() {
+      this.$router.push(
+        `/detailsVideoPage/${Number(this.$route.params.id) + 1}`
+      )
     },
   },
 }

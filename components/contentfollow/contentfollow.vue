@@ -106,7 +106,6 @@
                 controls
                 :src="item.url"
                 :poster="item.cover"
-                muted
               ></video>
             </div>
           </nuxt-link>

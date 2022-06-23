@@ -98,11 +98,18 @@
           </div>
         </div>
         <div class="flex">
-          <a
+          <span
             v-if="tokenUser && videoDataUser !== dataUser.id"
             class="mdi mdi-download text-[17px] w-7 h-7 flex items-center justify-center text-black rounded-full bg-[#eee] mr-2 list-icon-share"
-            @click="downloadVideo(urlVideo)"
-          ></a>
+            @click="showDialogDownload = true"
+          ></span>
+          <Dialog
+            :show="showDialogDownload"
+            title="Thông báo"
+            description="Bạn có muốn tải video từ bài đăng này ??"
+            :confirm="downloadVideo"
+            :cancel="unShowDialogDownload"
+          ></Dialog>
           <span
             v-if="tokenUser && videoDataUser === dataUser.id"
             class="mdi mdi-pencil-box-outline text-[15px] w-7 h-7 flex items-center justify-center bg-[#2563eb] text-white rounded-full mr-2 list-icon-share"
@@ -470,10 +477,6 @@ export default {
       type: Function,
       default: () => 1,
     },
-    urlVideo: {
-      type: String,
-      default: '',
-    },
     downloadVideo: {
       type: Function,
       default: () => 1,
@@ -512,6 +515,7 @@ export default {
       tokenUser: '',
       showDialog: false,
       showLoading: false,
+      showDialogDownload: false,
     }
   },
   computed: {
@@ -539,6 +543,9 @@ export default {
   methods: {
     unShowDialog() {
       this.showDialog = false
+    },
+    unShowDialogDownload() {
+      this.showDialogDownload = false
     },
     repCmt(id) {
       const res = this.listCmt.find((data) => data.id === id)
