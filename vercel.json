@@ -18,5 +18,10 @@
           "Service-Worker-Allowed": "/"
         }
       }
-    ]
-  }
+    ],
+    "functions": {
+      "src/pages/**/*": {
+        "memory": 3008
+      }
+    }
+}
