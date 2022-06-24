@@ -29,13 +29,6 @@ export default {
     '@nuxtjs/tailwindcss',
     '@nuxt/postcss8',
   ],
-  // mode: 'spa',
-  // loadingIndicator: {
-  //   name: 'chasing-dots',
-  //   color: '#f39151',
-  //   background: 'red',
-  // },
-  // ssr: false,
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/pwa
