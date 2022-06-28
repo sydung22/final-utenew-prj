@@ -15,10 +15,7 @@ const AuthService = {
   },
 
   async register(user) {
-    const res = await axios.post(
-      'http://34.215.131.209:8080/api/auth/register',
-      user
-    )
+    const res = await axios.post('https://utenew.tk/api/auth/register', user)
     if (res.status === 200) {
       // localStorage.setItem('token', res.data.access_token)
       // localStorage.setItem('user', JSON.stringify(res.data.user))
@@ -31,10 +28,7 @@ const AuthService = {
     return res.data
   },
   async login(user) {
-    const res = await axios.post(
-      'http://34.215.131.209:8080/api/auth/login',
-      user
-    )
+    const res = await axios.post('https://utenew.tk/api/auth/login', user)
 
     if (res && res.status === 200) {
       localStorage.setItem('token', res.data.access_token)
@@ -47,10 +41,7 @@ const AuthService = {
     // return res.data
   },
   async changePassword(data) {
-    const res = await axios.post(
-      'http://34.215.131.209:8080/api/auth/change-pass',
-      data
-    )
+    const res = await axios.post('https://utenew.tk/api/auth/change-pass', data)
     if (res.status === 200) {
       this.initAuthHeader()
       return res.data
@@ -61,7 +52,7 @@ const AuthService = {
   },
   async updateProfile(data) {
     const res = await axios.post(
-      'http://34.215.131.209:8080/api/auth/update-profile',
+      'https://utenew.tk/api/auth/update-profile',
       data
     )
 
@@ -77,10 +68,7 @@ const AuthService = {
   async comment(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post(
-        'http://34.215.131.209:8080/api/comment',
-        data
-      )
+      const res = await axios.post('https://utenew.tk/api/comment', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -94,7 +82,7 @@ const AuthService = {
   async reply(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://34.215.131.209:8080/api/reply', data)
+      const res = await axios.post('https://utenew.tk/api/reply', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -109,7 +97,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.post(
-        'http://34.215.131.209:8080/api/video/store-url',
+        'https://utenew.tk/api/video/store-url',
         data,
         config
       )
@@ -127,7 +115,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.post(
-        'http://34.215.131.209:8080/api/video/save-video',
+        'https://utenew.tk/api/video/save-video',
         data
       )
       if (res.status === 200) {
@@ -144,7 +132,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://34.215.131.209:8080/api/video/user/${id}/share`
+        `https://utenew.tk/api/video/user/${id}/share`
       )
       if (res.status === 200) {
         return res.data
@@ -160,7 +148,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://34.215.131.209:8080/api/video/params?type=SHARE`
+        `https://utenew.tk/api/video/params?type=SHARE`
       )
       if (res.status === 200) {
         return res.data
@@ -175,10 +163,7 @@ const AuthService = {
   async updateVideo(data, id) {
     try {
       this.initAuthHeader()
-      const res = await axios.put(
-        `http://34.215.131.209:8080/api/video/${id}`,
-        data
-      )
+      const res = await axios.put(`https://utenew.tk/api/video/${id}`, data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -192,9 +177,7 @@ const AuthService = {
   async deleteVideo(id) {
     try {
       this.initAuthHeader()
-      const res = await axios.delete(
-        `http://34.215.131.209:8080/api/video/${id}`
-      )
+      const res = await axios.delete(`https://utenew.tk/api/video/${id}`)
       if (res.status === 200) {
         return res.data
       } else {
@@ -208,9 +191,7 @@ const AuthService = {
   async deleteComment(id) {
     try {
       this.initAuthHeader()
-      const res = await axios.delete(
-        `http://34.215.131.209:8080/api/comment/${id}`
-      )
+      const res = await axios.delete(`https://utenew.tk/api/comment/${id}`)
       if (res.status === 200) {
         return res.data
       } else {
@@ -224,10 +205,7 @@ const AuthService = {
   async createHashtag(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post(
-        'http://34.215.131.209:8080/api/hashtag',
-        data
-      )
+      const res = await axios.post('https://utenew.tk/api/hashtag', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -241,10 +219,7 @@ const AuthService = {
   async deleteHashtag(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post(
-        'http://34.215.131.209:8080/api/hashtag',
-        data
-      )
+      const res = await axios.post('https://utenew.tk/api/hashtag', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -258,10 +233,7 @@ const AuthService = {
   async sendReport(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post(
-        'http://34.215.131.209:8080/api/report',
-        data
-      )
+      const res = await axios.post('https://utenew.tk/api/report', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -275,10 +247,7 @@ const AuthService = {
   async follow(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post(
-        'http://34.215.131.209:8080/api/follow',
-        data
-      )
+      const res = await axios.post('https://utenew.tk/api/follow', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -292,7 +261,7 @@ const AuthService = {
   async like(data) {
     try {
       this.initAuthHeader()
-      const res = await axios.post('http://34.215.131.209:8080/api/like', data)
+      const res = await axios.post('https://utenew.tk/api/like', data)
       if (res.status === 201) {
         return res.data
       } else {
@@ -306,9 +275,7 @@ const AuthService = {
   async download() {
     try {
       this.initAuthHeader()
-      const res = await axios.post(
-        'http://34.215.131.209:8080/api/user/minus-download'
-      )
+      const res = await axios.post('https://utenew.tk/api/user/minus-download')
       if (res.status === 200) {
         return res.data
       } else {
@@ -322,7 +289,7 @@ const AuthService = {
   async video() {
     try {
       this.initAuthHeader()
-      const res = await axios.get('http://34.215.131.209:8080/api/video')
+      const res = await axios.get('https://utenew.tk/api/video')
       if (res.status === 200) {
         return res.data
       } else {
@@ -337,7 +304,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.post(
-        `http://34.215.131.209:8080/api/video/${id}/share`,
+        `https://utenew.tk/api/video/${id}/share`,
         data
       )
       if (res.status === 200) {
@@ -354,7 +321,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        'http://34.215.131.209:8080/api/video/me?is_following=0'
+        'https://utenew.tk/api/video/me?is_following=0'
       )
       if (res.status === 200) {
         return res.data
@@ -370,7 +337,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        'http://34.215.131.209:8080/api/video/me?is_following=1'
+        'https://utenew.tk/api/video/me?is_following=1'
       )
       if (res.status === 200) {
         return res.data
@@ -384,7 +351,7 @@ const AuthService = {
   },
   async user() {
     try {
-      const res = await axios.get('http://34.215.131.209:8080/api/user')
+      const res = await axios.get('https://utenew.tk/api/user')
       if (res.status === 200) {
         return res.data
       } else {
@@ -398,7 +365,7 @@ const AuthService = {
   async hashtag() {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://34.215.131.209:8080/api/hashtag`)
+      const res = await axios.get(`https://utenew.tk/api/hashtag`)
 
       if (res.status === 200) {
         return res.data
@@ -413,9 +380,7 @@ const AuthService = {
   async getProfile() {
     try {
       this.initAuthHeader()
-      const res = await axios.get(
-        `http://34.215.131.209:8080/api/auth/user-profile`
-      )
+      const res = await axios.get(`https://utenew.tk/api/auth/user-profile`)
 
       if (res.status === 200) {
         return res.data
@@ -435,7 +400,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://34.215.131.209:8080/api/search?keyword=${data}`
+        `https://utenew.tk/api/search?keyword=${data}`
       )
 
       if (res.status === 200) {
@@ -451,7 +416,7 @@ const AuthService = {
   async detailsUser(id) {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://34.215.131.209:8080/api/user/${id}`)
+      const res = await axios.get(`https://utenew.tk/api/user/${id}`)
 
       if (res.status === 200) {
         return res.data
@@ -466,7 +431,7 @@ const AuthService = {
   async loadVideoById(id) {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://34.215.131.209:8080/api/video/${id}`)
+      const res = await axios.get(`https://utenew.tk/api/video/${id}`)
 
       if (res.status === 200) {
         return res.data
@@ -482,7 +447,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://34.215.131.209:8080/api/video/params?user_id=${id}`
+        `https://utenew.tk/api/video/params?user_id=${id}`
       )
 
       if (res.status === 200) {
@@ -499,7 +464,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://34.215.131.209:8080/api/video/params?hashtag[0]=${data}`
+        `https://utenew.tk/api/video/params?hashtag[0]=${data}`
       )
 
       if (res.status === 200) {
@@ -515,7 +480,7 @@ const AuthService = {
   async loadVideoLiked() {
     try {
       this.initAuthHeader()
-      const res = await axios.get(`http://34.215.131.209:8080/api/video/liked`)
+      const res = await axios.get(`https://utenew.tk/api/video/liked`)
 
       if (res.status === 200) {
         return res.data
@@ -531,7 +496,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://34.215.131.209:8080/api/comment?video_id=${id}`
+        `https://utenew.tk/api/comment?video_id=${id}`
       )
 
       if (res.status === 200) {
@@ -549,7 +514,7 @@ const AuthService = {
     try {
       this.initAuthHeader()
       const res = await axios.get(
-        `http://34.215.131.209:8080/api/reply?comment_id=${id}`
+        `https://utenew.tk/api/reply?comment_id=${id}`
       )
 
       if (res.status === 200) {
