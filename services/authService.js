@@ -4,6 +4,10 @@ const AuthService = {
     const token = localStorage.getItem('token')
     if (token && token !== '') {
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+      axios.defaults.headers.common['Access-Control-Allow-Methods'] = '*'
+      axios.defaults.headers.common['Access-Control-Allow-Headers'] =
+        'Origin, X-Requested-With,Authorization, Content-Type, Accept'
     } else {
       axios.defaults.headers.common.Authorization = ``
     }
