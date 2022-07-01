@@ -83,7 +83,7 @@
             ><strong
               data-e2e="video-views"
               class="text-[#fff] text-[17px] italic"
-              >65.9K</strong
+              >{{ item.views }}</strong
             >
           </div>
         </nuxt-link>
